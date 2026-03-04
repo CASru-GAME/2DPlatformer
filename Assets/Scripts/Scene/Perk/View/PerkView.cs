@@ -22,7 +22,7 @@ namespace Scene.View
             initialCanvas.enabled = false;
             perkCanvas.enabled = true;
             idleCanvas.enabled = false;
-            perkCountText.text = currentPerkCount.ToString();
+            perkCountText.text = currentPerkCount.ToString() + " / 8";
         }
 
         public void OpenIdle()
