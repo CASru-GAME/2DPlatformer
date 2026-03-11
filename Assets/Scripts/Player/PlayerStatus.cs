@@ -1,13 +1,13 @@
 using UnityEngine;
+using System;
 
 public class PlayerStatus
 {
-    // プロパティ：外部からは読み取れるが、直接書き換えられないようにする（カプセル化）
+    // 外部からは読み取れるga直接書き換えられないようにする
     public int CurrentLives { get; private set; }
     public int MaxLives { get; private set; }
 
-    // イベント：残機が変化したときに、Unity側（UIなど）に通知するための窓口
-    // これにより「残機が減った瞬間に音を鳴らす」などが簡単にできるようになります
+    // イベント：残機が変化したときに、Unityに通知する
     public event Action<int> OnLivesChanged;
     public event Action OnGameOver;
 
@@ -18,7 +18,7 @@ public class PlayerStatus
         CurrentLives = initialLives;
     }
 
-    // 残機を減らすメソッド
+    // 残機を減らす
     public void DecreaseLife()
     {
         if (CurrentLives <= 0) return;
@@ -34,7 +34,7 @@ public class PlayerStatus
         }
     }
 
-    // 残機を増やすメソッド（1UPなど）
+    // 残機を増やすメソッド
     public void AddLife()
     {
         CurrentLives++;
