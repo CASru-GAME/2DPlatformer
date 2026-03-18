@@ -5,7 +5,8 @@ namespace Perk.Data
 {
     public class TestPerk : PerkEffect
     {
-        static TestPerk()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(0, () => new TestPerk());
         }

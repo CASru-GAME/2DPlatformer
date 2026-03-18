@@ -9,7 +9,8 @@ namespace Perk.Data
         private float lastY;
         private float staySeconds = 0f;
 
-        static StayAddCount()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(16, () => new StayAddCount());
         }

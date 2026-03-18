@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 266144086deee96448126228eadad74e, type: 3}
+  m_Name: PerkViewDataTable
+  m_EditorClassIdentifier: Assembly-CSharp::Perk.Data.PerkViewDataTable
+  perkViewDataList:
+  - {fileID: 11400000, guid: e1f5a56f4bd0205469308358d52efbfe, type: 2}

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27af433462c44674eb9fb74c4b11184b, type: 3}
   m_Name: PerkTextCommonData
   m_EditorClassIdentifier: Assembly-CSharp::Perk.Data.PerkTextCommonData
-  perkEffectColor: {r: 1, g: 0.959212, b: 0.3066038, a: 1}
+  perkEffectColor: {r: 0.30588233, g: 1, b: 0.9440205, a: 1}
   stageColor: {r: 1, g: 0.3537736, b: 0.9036998, a: 1}

@@ -7,7 +7,8 @@ namespace Perk.Data
     {
         private bool isAffective = false;
 
-        static LfAddJp()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(6, () => new LfAddJp());
         }

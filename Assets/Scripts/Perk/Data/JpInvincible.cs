@@ -5,7 +5,8 @@ namespace Perk.Data
 {
     public class JpInvincible : PerkEffect
     {
-        static JpInvincible()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(13, () => new JpInvincible());
             PerkEvents.Update += OnUpdate;
