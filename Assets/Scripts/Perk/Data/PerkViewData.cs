@@ -6,7 +6,9 @@ namespace Perk.Data
     public class PerkViewData : ScriptableObject
     {
         [SerializeField] private int id;
+        public int ID => id;
         [SerializeField] private Sprite sprite;
+        public Sprite Sprite => sprite;
         [SerializeField] private string effectDescription;
         [SerializeField] private string stageDescription;
         [SerializeField] private PerkTextCommonData perkTextCommonData;

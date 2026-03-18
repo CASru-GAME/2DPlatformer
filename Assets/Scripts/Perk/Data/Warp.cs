@@ -7,7 +7,8 @@ namespace Perk.Data
     {
         private int useStack = 0;
 
-        static Warp()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(19, () => new Warp());
         }

@@ -6,7 +6,8 @@ namespace Perk.Data
 {
     public class Luck : PerkEffect
     {
-        static Luck()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(8, () => new Luck());
         }

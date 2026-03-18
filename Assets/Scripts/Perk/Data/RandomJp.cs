@@ -5,7 +5,8 @@ namespace Perk.Data
 {
     public class RandomJp : PerkEffect
     {
-        static RandomJp()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(20, () => new RandomJp());
         }

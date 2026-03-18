@@ -9,7 +9,8 @@ namespace Perk.Data
         private Vector2 currentPosition = Vector2.zero;
         private bool isLanding = false;
 
-        static LdDistanceHl()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(14, () => new LdDistanceHl());
         }
