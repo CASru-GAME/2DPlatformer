@@ -16,7 +16,7 @@ namespace Scene.Controller
         public PerkView PerkView => perkView;
         [SerializeField] private int maxPerkCount;
         public int MaxPerkCount => maxPerkCount;
-        [SerializeField] private SelectPerkSystem selectPerkSystem;
+        [SerializeField] private SelectStageSystem selectPerkSystem;
 
         private void Start()
         {
@@ -49,7 +49,7 @@ namespace Scene.Controller
 
         public void SetSelectPerk(int currentPerkCount)
         {
-            selectPerkSystem.SetRandomPerkID(currentPerkCount);
+            selectPerkSystem.SetRandomIDs(currentPerkCount);
         }
     }
 }

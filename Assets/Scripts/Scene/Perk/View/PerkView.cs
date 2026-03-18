@@ -45,9 +45,10 @@ namespace Scene.View
             stageCanvas.enabled = true;
         }
 
-        public void SetPerkText(int boxNumber, int perkID)
+        public void SetPerkText(int boxNumber, int perkID, int stageID, int gimmickID, int directionID)
         {
-            perkTextList[boxNumber].text = perkViewDataTable.GetPerkDescription(perkID);
+            perkTextList[boxNumber].text = perkViewDataTable.GetPerkDescription(perkID) + "\n//以下デバッグ用//\nS:" + stageID 
+                + " G:" + gimmickID + " D:" + directionID;
         }
 
         public void OpenIdle()
