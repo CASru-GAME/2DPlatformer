@@ -7,13 +7,13 @@ namespace Scene.Model
     {
         private readonly static int[] selectedStageIDs = new int[8];
         //ステージID(1~18)参照用
-        public int[] SelectedStageIDs => selectedStageIDs;
+        public static int[] SelectedStageIDs => selectedStageIDs;
         private readonly static int[] selectedGimmickIDs = new int[8];
         //ギミックID(1~5)参照用
-        public int[] SelectedGimmickIDs => selectedGimmickIDs;
+        public static int[] SelectedGimmickIDs => selectedGimmickIDs;
         private readonly static int[] selectedDirectionIDs = new int[8];
         //向きID(1~4)参照用
-        public int[] SelectedDirectionIDs => selectedDirectionIDs;
+        public static int[] SelectedDirectionIDs => selectedDirectionIDs;
 
         private readonly int[] currentPerkIDs = new int[3];
         public int[] CurrentPerkIDs => currentPerkIDs;
