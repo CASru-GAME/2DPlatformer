@@ -7,7 +7,8 @@ namespace Perk.Data
     {
         private bool isCharging = false;
 
-        static DmEnhanceJp()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(2, () => new DmEnhanceJp());
         }

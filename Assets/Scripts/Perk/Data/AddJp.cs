@@ -5,7 +5,8 @@ namespace Perk.Data
 {
     public class AddJp : PerkEffect
     {
-        static AddJp()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(10, () => new AddJp());
         }

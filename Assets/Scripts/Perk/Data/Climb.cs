@@ -5,7 +5,8 @@ namespace Perk.Data
 {
     public class Climb : PerkEffect
     {
-        static Climb()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(15, () => new Climb());
         }

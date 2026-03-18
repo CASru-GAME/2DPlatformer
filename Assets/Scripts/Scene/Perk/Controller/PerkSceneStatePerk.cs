@@ -15,7 +15,7 @@ namespace Scene.Controller
 
         public void OnEnter()
         {
-            sM.PerkView.OpenPerk(currentPerkCount);
+            sM.SetSelectPerk(currentPerkCount);
         }
 
         public void HandleInput()
@@ -24,7 +24,7 @@ namespace Scene.Controller
                 if (currentPerkCount < sM.MaxPerkCount)
                     sM.ChangeState(new PerkSceneStatePerk(sM, currentPerkCount + 1));
                 else
-                sM.ChangeState(new PerkSceneStateIdle(sM));
+                    sM.ChangeState(new PerkSceneStateIdle(sM));
         }
 
         public void OnExit()

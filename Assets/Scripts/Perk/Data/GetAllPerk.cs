@@ -5,7 +5,8 @@ namespace Perk.Data
 {
     public class GetAllPerk : PerkEffect
     {
-        static GetAllPerk()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(22, () => new GetAllPerk());
         }

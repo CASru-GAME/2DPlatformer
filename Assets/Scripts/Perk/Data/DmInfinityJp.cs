@@ -5,7 +5,8 @@ namespace Perk.Data
 {
     public class DmInfinityJp : PerkEffect
     {
-        static DmInfinityJp()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(5, () => new DmInfinityJp());
             PerkEvents.Update += OnUpdate;

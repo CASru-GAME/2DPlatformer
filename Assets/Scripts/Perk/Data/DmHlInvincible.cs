@@ -5,7 +5,8 @@ namespace Perk.Data
 {
     public class DmHlInvincible : PerkEffect
     {
-        static DmHlInvincible()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(3, () => new DmHlInvincible());
             PerkEvents.Update += OnUpdate;

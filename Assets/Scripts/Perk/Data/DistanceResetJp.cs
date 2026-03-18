@@ -8,7 +8,8 @@ namespace Perk.Data
         private float lastY = 0f;
         private float currentY = 0f;
 
-        static DistanceResetJp()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(18, () => new DistanceResetJp());
         }
