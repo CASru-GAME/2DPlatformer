@@ -5,7 +5,8 @@ namespace Perk.Data
 {
     public class Shield : PerkEffect
     {
-        static Shield()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(7, () => new Shield());
         }

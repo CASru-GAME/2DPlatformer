@@ -5,7 +5,8 @@ namespace Perk.Data
 {
     public class AddLf : PerkEffect
     {
-        static AddLf()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(9, () => new AddLf());
         }

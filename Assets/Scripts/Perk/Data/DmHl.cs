@@ -5,7 +5,8 @@ namespace Perk.Data
 {
     public class DmHl : PerkEffect
     {
-        static DmHl()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(4, () => new DmHl());
         }

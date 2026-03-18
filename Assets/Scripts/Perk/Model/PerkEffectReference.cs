@@ -37,12 +37,12 @@ namespace Perk.Model
         public int AdditionalLuck = 0;
         //追加の最大体力
         public int AdditionalMaxLife = 0;
-        public int ClimbStack = 0;
+        public int ClimbStack = 1;
         //壁つかまりできるかどうか
         public bool CanClimb => ClimbStack > 0;
         public int AdditionalPerkStack = 0;
         public bool DoesAddPerkCount => AdditionalPerkStack > 0;
-        public int GlideStack = 0;
+        public int GlideStack = 1;
         //滑空できるかどうか
         public bool CanGlide => GlideStack > 0;
         public int ResetJumpCountStack = 0;

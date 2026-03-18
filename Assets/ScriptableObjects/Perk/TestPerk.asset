@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Perk.Data.PerkViewData
   id: 0
   sprite: {fileID: 0}
-  effectDescription: 
-  stageDescription: 
+  effectDescription: "\u52B9\u679C"
+  stageDescription: "\u30B9\u30C6\u30FC\u30B8\u5909\u5316"
   perkTextCommonData: {fileID: 11400000, guid: 4d35e886d9abc7041937585227060ca0, type: 2}

@@ -48,5 +48,12 @@ namespace Perk.Model
             enabledPerkList[randomIndex].Remove();
             enabledPerkList.RemoveAt(randomIndex);
         }
+
+        public static int GetPerkIDAtRandom()
+        {
+            List<int> keys = new(perkDictionary.Keys);
+            int randomIndex = UnityEngine.Random.Range(0, keys.Count);
+            return keys[randomIndex];
+        }
     }
 }

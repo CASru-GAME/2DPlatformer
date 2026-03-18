@@ -5,7 +5,8 @@ namespace Perk.Data
 {
     public class Glide : PerkEffect
     {
-        static Glide()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(17, () => new Glide());
         }

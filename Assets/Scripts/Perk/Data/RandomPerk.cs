@@ -6,7 +6,8 @@ namespace Perk.Data
     public class RandomPerk : PerkEffect
     {
         private int useStack = 0;
-        static RandomPerk()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Initialize()
         {
             PerkEffectStorage.RegisterPerk(21, () => new RandomPerk());
         }

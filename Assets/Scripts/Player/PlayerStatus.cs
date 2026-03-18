@@ -1,9 +1,10 @@
 using UnityEngine;
 using System;
+using Perk.Model;
 
 public class PlayerStatus
 {
-    // 外部からは読み取れるga直接書き換えられないようにする
+    // 外部からは読み取れるが直接書き換えられないようにする
     public int CurrentLives { get; private set; }
     public int MaxLives { get; private set; }
 
@@ -14,14 +15,45 @@ public class PlayerStatus
     // コンストラクタ：ゲーム開始時の残機を設定
     public PlayerStatus(int initialLives)
     {
-        MaxLives = initialLives;
-        CurrentLives = initialLives;
+        var perk = PerkEffectReference.Instance;
+        MaxLives = initialLives + perk.AdditionalMaxLife;
+        CurrentLives = MaxLives;
+    }
+
+    // ダメージを受けるか判定するメソッド
+    public bool CanTakeDamage()
+    {
+        var perk = Perk.Model.PerkEffectReference.Instance;
+
+        // 無敵状態の場合はダメージを受けない
+        if (perk.IsInvincible)
+        {
+            Debug.Log("ダメージを受けない（無敵状態）");
+            return false;
+        }
+
+        // シールドがある場合はスタックを減らしてガード
+        if (perk.HasShield)
+        {
+            perk.ShieldStack--;
+            Debug.Log($"ガード　残りシールドスタック: {perk.ShieldStack}");
+            
+            // シールドを消費したらしばらく無敵
+            perk.InvincibleSeconds = 1f; // 例: 1秒間無敵
+            return false;
+        }
+
+        // それ以外の場合はダメージを受ける(デバッグはPlayerControllerの方で行う)
+        return true;
     }
 
     // 残機を減らす
     public void DecreaseLife()
     {
-        if (CurrentLives <= 0) return;
+        if (CurrentLives <= 0) 
+        {
+            return;
+        }
 
         CurrentLives--;
         
