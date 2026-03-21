@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Dev/DevGame.unity
     guid: 60e63a9f82a6cf24da77c460cec5b589
+  - enabled: 1
+    path: Assets/Scenes/Dev/Syou.unity
+    guid: 2c3132ba727ebeb43add8c9d71224789
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
