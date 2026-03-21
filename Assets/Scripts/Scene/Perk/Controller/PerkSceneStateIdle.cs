@@ -1,3 +1,4 @@
+using Scene.Model;
 using UnityEngine;
 
 namespace Scene.Controller
@@ -14,6 +15,8 @@ namespace Scene.Controller
         public void OnEnter()
         {
             sM.PerkView.OpenIdle();
+            //デバッグ用：ステージ構築の結果を表示
+            SelectedStageStorage.PrintSelectedStage();
         }
 
         public void HandleInput()

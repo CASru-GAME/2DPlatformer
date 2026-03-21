@@ -529,7 +529,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6550563079525300028, guid: c448c012a28773349916fcb061b488a5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6550563079525300028, guid: c448c012a28773349916fcb061b488a5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
@@ -560,8 +560,16 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6550563079525300028, guid: c448c012a28773349916fcb061b488a5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SelectStage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550563079525300028, guid: c448c012a28773349916fcb061b488a5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
       value: SetStageImage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550563079525300028, guid: c448c012a28773349916fcb061b488a5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Scene.Controller.SelectStageSystem, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6550563079525300028, guid: c448c012a28773349916fcb061b488a5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
@@ -701,8 +709,16 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6550563079525300028, guid: c448c012a28773349916fcb061b488a5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SelectStage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550563079525300028, guid: c448c012a28773349916fcb061b488a5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
       value: SetStageImage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550563079525300028, guid: c448c012a28773349916fcb061b488a5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Scene.Controller.SelectStageSystem, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6550563079525300028, guid: c448c012a28773349916fcb061b488a5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
@@ -2222,8 +2238,16 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6550563079525300028, guid: c448c012a28773349916fcb061b488a5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SelectStage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550563079525300028, guid: c448c012a28773349916fcb061b488a5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
       value: SetStageImage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550563079525300028, guid: c448c012a28773349916fcb061b488a5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Scene.Controller.SelectStageSystem, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6550563079525300028, guid: c448c012a28773349916fcb061b488a5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
