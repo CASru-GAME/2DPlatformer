@@ -12,7 +12,7 @@ namespace Scene.Model
         //ギミックID(1~5)参照用
         public static int[] SelectedGimmickIDs => selectedGimmickIDs;
         private readonly static int[] selectedDirectionIDs = new int[8];
-        //向きID(1~4)参照用
+        //向きID(1~3)参照用
         public static int[] SelectedDirectionIDs => selectedDirectionIDs;
 
         private readonly int[] currentPerkIDs = new int[3];
@@ -25,13 +25,14 @@ namespace Scene.Model
         public int[] CurrentDirectionIDs => currentDirectionIDs;
         private readonly int MaxStageID = 18;
         private readonly int MaxGimmickID = 5;
+        private int currentSelectedDirectionID = 0;
 
-        public void SetRandomIDs()
+        public void SetRandomIDs(int currentPickCount)
         {
             SetRandomPerkID();
             SetRandomStageID();
             SetRandomGimmickID();
-            SetRandomDirectionID();
+            SetRandomDirectionID(currentPickCount);
         }
         
         private void SetRandomPerkID()
@@ -55,10 +56,26 @@ namespace Scene.Model
                 currentGimmickIDs[i] = Random.Range(1, MaxGimmickID + 1);
         }
 
-        private void SetRandomDirectionID()
+        private void SetRandomDirectionID(int currentPickCount)
         {
-            for (int i = 0; i < currentDirectionIDs.Length; i++)
-                currentDirectionIDs[i] = Random.Range(1, 5);
+            if (currentPickCount == 1)
+            {
+                for (int i = 0; i < currentDirectionIDs.Length; i++)
+                    currentDirectionIDs[i] = 1;
+                return;
+            }
+            if (currentSelectedDirectionID == 2)
+                for (int i = 0; i < currentDirectionIDs.Length; i++)
+                    currentDirectionIDs[i] = Random.Range(1, 3);
+            else if (currentSelectedDirectionID == 3)
+                for (int i = 0; i < currentDirectionIDs.Length; i++)
+                {
+                    int r = Random.Range(1, 3);
+                    currentDirectionIDs[i] = r == 1 ? 1 : 3;
+                }
+            else
+                for (int i = 0; i < currentDirectionIDs.Length; i++)
+                    currentDirectionIDs[i] = Random.Range(1, 4);
         }
 
         public void SelectStage(int boxNumber, int currentPickCount)
@@ -67,6 +84,7 @@ namespace Scene.Model
             selectedStageIDs[currentPickCount - 1] = currentStageIDs[boxNumber];
             selectedGimmickIDs[currentPickCount - 1] = currentGimmickIDs[boxNumber];
             selectedDirectionIDs[currentPickCount - 1] = currentDirectionIDs[boxNumber];
+            currentSelectedDirectionID = currentDirectionIDs[boxNumber];
         }
 
         public static void PrintSelectedStage()
