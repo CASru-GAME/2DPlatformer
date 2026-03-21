@@ -443,8 +443,6 @@ MonoBehaviour:
   initialLives: 3
   respawnPosition: {x: 0, y: 0}
   glideGravityMultiplier: 0.2
-  wallKickForce: {x: 7, y: 12}
-  wallKickLockDuration: 0.2
 --- !u!212 &781710213
 SpriteRenderer:
   m_ObjectHideFlags: 0

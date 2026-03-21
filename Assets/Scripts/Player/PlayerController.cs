@@ -39,6 +39,16 @@ public class PlayerController : MonoBehaviour
     [Range(0f, 1f)] 
     [SerializeField] private float glideGravityMultiplier = 0.2f;
 
+    [Header("壁キックの設定")]
+    [SerializeField] private Vector2 wallKickForce = new Vector2(10f, 12f); // 壁キックの力の大きさ
+    [SerializeField] private float wallKickLockDuration = 0.2f; // 壁キックの操作不能期間
+    
+    //入力などの内部処理に使う変数
+    private float moveInput;
+    private bool jumpDown;
+    private bool jumpHold;
+    private bool dash;
+    private float lockTimer; //実際に操作不能時間を操作するタイマーの変数(初期値は0)
     
     // パーク用の変数
     private int remainJumpCount; //残りのジャンプ回数
@@ -89,9 +99,55 @@ public class PlayerController : MonoBehaviour
 
     // Update is called once per frame
     private void Update()
-    {
+    {   
+        if (psm == null)
+        {
+            psm = new PlayerMove(); // 念のためPlayerMoveのインスタンスを作成
+        }
+        
         //パーク情報の取得
         var perk = PerkEffectReference.Instance;
+        if (perk == null)
+        {
+            Debug.LogError("PerkEffectReferenceのインスタンスが見つかりません");
+            return;
+        }
+
+        //入力の取得をする関数を空の状態で定義
+        moveInput = 0;
+        jumpDown = false;
+        jumpHold = false;
+        dash = false;
+
+        // 操作不能時間がないときは入力を受け付ける
+        if(lockTimer <= 0)
+        {
+            // 入力の取得
+            moveInput = Input.GetAxisRaw("Horizontal"); 
+            // GetKeyDown：押した瞬間（ジャンプ判定用）
+            jumpDown = Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow); // ジャンプボタンを押した瞬間
+            // GetKey：押しっぱなし（滞空/グライド判定用）
+            jumpHold = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow); // ジャンプボタンを押し続けているか
+            dash = Input.GetKey(KeyCode.LeftShift); 
+        }
+        else
+        {
+            // 操作不能時間がある場合は入力を無効にしてカウントダウンする
+            lockTimer -= Time.deltaTime;
+        }
+        
+        //キャラクターの向きをきめる
+        if (spriteRenderer != null)
+        {
+            if (moveInput > 0)
+            {
+                spriteRenderer.flipX = false; // 右を向く
+            }
+            else if (moveInput < 0)
+            {
+                spriteRenderer.flipX = true; // 左を向く
+            }
+        }
 
         //シールドのパークがあるときはシールドオブジェクトを表示
         if (shieldObject != null)
@@ -125,20 +181,15 @@ public class PlayerController : MonoBehaviour
             }
         }
         
-        // 入力の取得
-        float moveInput = Input.GetAxisRaw("Horizontal"); 
-        // GetKeyDown：押した瞬間（ジャンプ判定用）
-        bool jumpDown = Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow); // ジャンプボタンを押した瞬間
-        // GetKey：押しっぱなし（滞空/グライド判定用）
-        bool jumpHold = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow); // ジャンプボタンを押し続けているか
-        bool dash = Input.GetKey(KeyCode.LeftShift); 
-
         // 地面に接地しているかの判定 
         Vector2 groundCheckPos = (Vector2)transform.position + Vector2.down * groundCheckOffset;
         bool isGrounded = Physics2D.OverlapBox(groundCheckPos, groundCheckSize, 0f, groundLayer);
 
         // 壁に接触しているかの判定
         bool isWalled = CheckWall(moveInput);
+
+        //壁キック用の判定
+        bool isNearWall = CheckWall(1f) || CheckWall(-1f);
 
         //状態更新用のフラグを用意(今、壁つかまり中か滞空中かを計算して渡す）
         bool isClimbing = isWalled && perk.CanClimb && !isGrounded && rb.linearVelocity.y <= 0;
@@ -164,7 +215,7 @@ public class PlayerController : MonoBehaviour
         //ジャンプの実行なのでjumpDownを使う
         if (jumpDown)
         {
-            HandleJump(isGrounded, isWalled, perk);
+            HandleJump(isGrounded, isNearWall, isWalled, perk);
         }
 
         //アニメーションの更新
@@ -183,8 +234,23 @@ public class PlayerController : MonoBehaviour
     }
 
     //ジャンプの判断
-    private void HandleJump(bool isGrounded, bool isWalled, PerkEffectReference perk)
+    private void HandleJump(bool isGrounded, bool isNearWall, bool isWalled,PerkEffectReference perk)
     {
+        //地面にいなくて壁に触れていて、壁の方向に進む入力があるときは壁キック
+        if (!isGrounded && isNearWall)
+        {
+            //壁のある方向に進む入力があるかどうかを判定するために、moveInputの値と壁の位置から判断する
+            bool pressingTowardRightwall = (moveInput > 0 && CheckWall(1f));
+            bool pressingTowardLeftwall = (moveInput < 0 && CheckWall(-1f));
+            
+            if(pressingTowardRightwall || pressingTowardLeftwall)
+            {
+                ApplyWallkick();
+                //壁キック後は通常のジャンプ処理は行わない
+                return;
+            }
+        }
+        
         //壁つかまりのパークがあって壁についているときはジャンプできない
         if (isWalled && !isGrounded && perk.CanClimb)
         {
@@ -206,11 +272,32 @@ public class PlayerController : MonoBehaviour
     
     private void ApplyMovement(float input, bool isWalled, bool isGrounded, bool isJumpHolding, PerkEffectReference perk)
     {
+        //壁キックの操作不能時間は左右の速度更新をさせない
+        if (lockTimer > 0)
+        {
+            return; // 操作不能時間がある場合は移動処理を行わない
+        }
+        
+        //空中で何も入力していないときは空中での慣性を活かすために横の速度を維持する（壁キックの操作不能時間もここで維持される）
+        float targetHorizontalVelocity;
+        
         // 今の状態がDashならdashSpeed、そうでなければwalkSpeedを使う
         float speed = (psm.CurrentState == PlayerState.Dash) ? dashSpeed : walkSpeed;
         // パークの移動速度倍率を適用
         speed *= perk.MoveSpeedMultiplier;
 
+        if (!isGrounded && input == 0)
+        {
+            // 入力がないときは現在の速度を維持する（空中での慣性を活かす）
+            targetHorizontalVelocity = rb.linearVelocity.x;
+        }
+        else
+        {
+            // 入力がある（または地面にいる）ときは通常の速度計算をする
+            targetHorizontalVelocity = input * speed; 
+        }
+        
+        
         //壁つかまりのパーク
         if (isWalled && perk.CanClimb && !isGrounded && rb.linearVelocity.y <= 0.01f)
         {
@@ -232,7 +319,7 @@ public class PlayerController : MonoBehaviour
         }
         
         // 物理速度を更新（左右移動のみ。縦はrb.velocity.yを維持）
-        rb.linearVelocity = new Vector2(input * speed, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(targetHorizontalVelocity, rb.linearVelocity.y);
     }
 
     private void ApplyJump(float jumpPowerMultiplier = 1.0f)
@@ -249,6 +336,48 @@ public class PlayerController : MonoBehaviour
         Vector2 wallCheckPos = (Vector2)transform.position + new Vector2(direction * wallCheckOffset, 0);
        
         return Physics2D.OverlapBox(wallCheckPos, wallCheckSize, 0f, wallLayer);
+    }
+
+    //壁キックの処理のメソッド
+    private void ApplyWallkick()
+    {
+        //壁が左右のどちらにあるのか、入力方向と向いている方向からCheckWallと同じように判定する
+        float wallDirection = 0;
+
+        if (CheckWall(1f))
+        {
+            wallDirection = 1; // 右に壁がある
+        }
+        else if (CheckWall(-1f))
+        {
+            wallDirection = -1; // 左に壁がある
+        }
+        else
+        {
+            // キャラの向き（flipX）から壁の位置を推測する
+        // flipXがfalse（右向き）なら右に壁があるはず、true（左向き）なら左に壁がある
+            wallDirection = spriteRenderer.flipX ? -1f : 1f;
+        }
+
+        //壁と反対の方向にする
+        float kickDirection = -wallDirection;
+
+        //速度を上書きして壁キックをする
+        rb.linearVelocity = new Vector2(kickDirection * wallKickForce.x, wallKickForce.y);
+
+        //飛んでいく方向にキャラクターの向きを変える
+        if (spriteRenderer != null)
+        {
+            // 右に飛ぶなら右を向く、左に飛ぶなら左を向く
+            spriteRenderer.flipX = (kickDirection > 0); 
+        }
+        
+        //壁キックの操作不能時間をセットする
+        lockTimer = wallKickLockDuration;
+
+        //壁キック後は空中ジャンプ回数を回復
+        var perk = PerkEffectReference.Instance;
+        remainJumpCount = perk.AdditionalJumpCount;
     }
 
     // デバッグ用：地面と壁の判定の可視化
