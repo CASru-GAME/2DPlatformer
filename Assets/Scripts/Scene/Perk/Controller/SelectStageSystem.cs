@@ -15,7 +15,7 @@ namespace Scene.Controller
         public void SetRandomIDs(int currentPickCount)
         {
             this.currentPickCount = currentPickCount;
-            selectedStageStorage.SetRandomIDs();
+            selectedStageStorage.SetRandomIDs(currentPickCount);
             for (int i = 0; i < selectedStageStorage.CurrentPerkIDs.Length; i++)
                 perkView.SetPerkText(i, selectedStageStorage.CurrentPerkIDs[i], selectedStageStorage.CurrentStageIDs[i], selectedStageStorage.CurrentGimmickIDs[i], selectedStageStorage.CurrentDirectionIDs[i]);
             perkView.OpenPerk(currentPickCount);
