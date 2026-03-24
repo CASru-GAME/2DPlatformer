@@ -8,6 +8,8 @@ public class StageGenerator2 : MonoBehaviour
     public GameObject UpSideStage;
     public GameObject SideDownStage;
     public GameObject DownSideStage;
+    public GameObject StartStage;
+    public GameObject GoalStage;
 
     void Start()
     {
@@ -17,13 +19,16 @@ public class StageGenerator2 : MonoBehaviour
     void StageGenerate()
     {
         Vector3 position = Vector3.zero;
+        int direction = 0;
         int previousDirection = 0;
+
+        Instantiate (StartStage, new Vector3(-10, 0, 0), Quaternion.identity);
 
         for (int i = 0; i < 8; i++)
         {
             int stage = SelectedStageStorage.SelectedStageIDs[i]; //ステージID取得
             int Gimmick = SelectedStageStorage.SelectedGimmickIDs[i]; //ギミックID取得
-            int direction = SelectedStageStorage.SelectedDirectionIDs[i]; //方向ID取得
+            direction = SelectedStageStorage.SelectedDirectionIDs[i]; //方向ID取得
 
             GameObject prefab = prefabManager.stagePrefabs[stage - 1];
 
@@ -87,6 +92,21 @@ public class StageGenerator2 : MonoBehaviour
 
             Instantiate(prefab, position, Quaternion.identity);
             previousDirection = direction;
+        }
+
+        if (direction == 1)
+        {
+            Instantiate(GoalStage, new Vector3(position.x + 10, position.y, position.z), Quaternion.identity);
+        }
+
+        if (direction == 2)
+        {
+            Instantiate(GoalStage, new Vector3(position.x, position.y + 10, position.z), Quaternion.identity);
+        }
+
+        if (direction == 3)
+        {
+            Instantiate(GoalStage, new Vector3(position.x, position.y - 10, position.z), Quaternion.identity);
         }
     }
 }
