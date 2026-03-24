@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Perk.Data;
+using Scene.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,19 +13,22 @@ namespace Scene.View
         [SerializeField] private Canvas stageCanvas;
         [SerializeField] private Text perkCountText;
         [SerializeField] private List<Text> perkTextList;
-        [SerializeField] private PerkViewDataTable perkViewDataTable;
+        [SerializeField] private PerkSelectViewDataTable perkSelectViewDataTable;
         [SerializeField] private Image startImage;
         private Vector2 lastStageImagePosition;
         [SerializeField] private Image stageImagePrefab;
         private Vector2 startPosition;
         private Vector2 goalPosition;
-        private readonly List<Image> stageImageList = new();
+        private readonly List<Image> selectedStageImageList = new();
+        [SerializeField] private List<Image> stageImageList = new();
+        [SerializeField] private List<Image> perkImageList = new();
+        private int lastDirectionID = 1;
 
         private void Start()
         {
             startPosition = startImage.rectTransform.anchoredPosition;
             lastStageImagePosition = startPosition;
-            stageImageList.Add(startImage);
+            selectedStageImageList.Add(startImage);
         }
         
         public void OpenInitial()
@@ -45,10 +48,11 @@ namespace Scene.View
             stageCanvas.enabled = true;
         }
 
-        public void SetPerkText(int boxNumber, int perkID, int stageID, int gimmickID, int directionID)
+        public void SetPerkSelectView(int boxNumber, int perkID, int stageID, int gimmickID, int directionID)
         {
-            perkTextList[boxNumber].text = perkViewDataTable.GetPerkDescription(perkID) + "\n//以下デバッグ用//\nS:" + stageID 
-                + " G:" + gimmickID + " D:" + directionID;
+            perkTextList[boxNumber].text = perkSelectViewDataTable.GetDescription(perkID, gimmickID, directionID);
+            stageImageList[boxNumber].sprite = perkSelectViewDataTable.GetStageSprite(stageID);
+            perkImageList[boxNumber].sprite = perkSelectViewDataTable.GetPerkSprite(perkID);
         }
 
         public void OpenIdle()
@@ -59,33 +63,53 @@ namespace Scene.View
             idleCanvas.enabled = true;
         }
 
-        public void SetStageImage()
+        public void SetStageImage(int newDirectionID, int stageID)
         {
-            Vector2 direction = new(1, 0); //テスト用
-            Vector2 newStageImagePosition = lastStageImagePosition + direction * startImage.rectTransform.sizeDelta * 1.1f;
+            if (lastDirectionID == 3 && newDirectionID == 1)
+                SetStageImageWithSprite(lastDirectionID, perkSelectViewDataTable.GetConnectStageSprite(1));
+            else if (lastDirectionID == 1 && newDirectionID == 3)
+                SetStageImageWithSprite(lastDirectionID, perkSelectViewDataTable.GetConnectStageSprite(2));
+            else if (lastDirectionID == 1 && newDirectionID == 2)
+                SetStageImageWithSprite(lastDirectionID, perkSelectViewDataTable.GetConnectStageSprite(3));
+            else if (lastDirectionID == 2 && newDirectionID == 1)
+                SetStageImageWithSprite(lastDirectionID, perkSelectViewDataTable.GetConnectStageSprite(4));
+
+            SetStageImageWithSprite(newDirectionID, perkSelectViewDataTable.GetStageSprite(stageID));
+        }
+
+        private void SetStageImageWithSprite(int newDirectionID, Sprite stageSprite)
+        {
+            Vector2 direction = new();
+            switch (newDirectionID)
+            {
+                case 1:
+                    direction = new Vector2(1, 0);
+                    break;
+                case 2:
+                    direction = new Vector2(0, 1);
+                    break;
+                case 3:
+                    direction = new Vector2(0, -1);
+                    break;
+            }
+            Vector2 newStageImagePosition = lastStageImagePosition + direction * startImage.rectTransform.sizeDelta;
             Image newStageImage = Instantiate(stageImagePrefab);
+            newStageImage.sprite = stageSprite;
             newStageImage.transform.SetParent(startImage.transform.parent, false);
             newStageImage.rectTransform.anchoredPosition = newStageImagePosition;
             lastStageImagePosition = newStageImagePosition;
-            stageImageList.Add(newStageImage);
+            lastDirectionID = newDirectionID;
+            selectedStageImageList.Add(newStageImage);
         }
 
         private void SetGoalImage()
         {
-            Vector2 direction = new(1, 0); //テスト用
-            Vector2 newStageImagePosition = lastStageImagePosition + direction * startImage.rectTransform.sizeDelta * 1.1f;
-            Image newStageImage = Instantiate(stageImagePrefab);
-            newStageImage.transform.SetParent(startImage.transform.parent, false);
-            newStageImage.rectTransform.anchoredPosition = newStageImagePosition;
-            lastStageImagePosition = newStageImagePosition;
-            goalPosition = newStageImagePosition;
-            stageImageList.Add(newStageImage);
+            SetStageImage(1, 20);
 
-            Vector2 diff = -0.5f * (goalPosition + startPosition);
-
-            for (int i = 0; i < stageImageList.Count; i++)
+            Vector2 diff = -0.5f * (lastStageImagePosition + startPosition);
+            for (int i = 0; i < selectedStageImageList.Count; i++)
             {
-                Image stageImage = stageImageList[i];
+                Image stageImage = selectedStageImageList[i];
                 Vector2 targetPosition = stageImage.rectTransform.anchoredPosition + diff;
                 stageImage.rectTransform.anchoredPosition = targetPosition;
             }

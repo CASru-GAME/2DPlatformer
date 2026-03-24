@@ -7,7 +7,7 @@ namespace Perk.Model
 {
     public static class PerkEffectStorage
     {
-        private static readonly List<PerkEffect> enabledPerkList = new();
+        private static readonly List<(int id, PerkEffect perkEffect)> enabledPerkList = new();
         private static readonly Dictionary<int, Func<PerkEffect>> perkDictionary = new();
 
         public static void RegisterPerk(int id, Func<PerkEffect> perkEffectFactory)
@@ -26,8 +26,14 @@ namespace Perk.Model
         {
             if (perkDictionary.TryGetValue(id, out Func<PerkEffect> perkEffectFactory))
             {
+                for(int i = 0; i < enabledPerkList.Count; i++)
+                    if(enabledPerkList[i].id == id)
+                    {
+                        enabledPerkList[i].perkEffect.Add();
+                        return;
+                    }
                 PerkEffect perkEffect = perkEffectFactory();
-                enabledPerkList.Add(perkEffect);
+                enabledPerkList.Add((id, perkEffect));
                 perkEffect.Add();
             }
             else
@@ -45,14 +51,21 @@ namespace Perk.Model
             }
 
             int randomIndex = UnityEngine.Random.Range(0, enabledPerkList.Count);
-            enabledPerkList[randomIndex].Remove();
-            enabledPerkList.RemoveAt(randomIndex);
+            for(int i = 0; i < enabledPerkList.Count; i++)
+                if(enabledPerkList[i].id == enabledPerkList[randomIndex].id)
+                {
+                    enabledPerkList[i].perkEffect.Remove();
+                    if(enabledPerkList[i].perkEffect.Stack == 0)
+                        enabledPerkList.RemoveAt(i);
+                    return;
+                }
         }
 
         public static int GetPerkIDAtRandom()
         {
             List<int> keys = new(perkDictionary.Keys);
-            int randomIndex = UnityEngine.Random.Range(0, keys.Count);
+            Debug.Log(keys.Count);
+            int randomIndex = UnityEngine.Random.Range(1, keys.Count);
             return keys[randomIndex];
         }
     }

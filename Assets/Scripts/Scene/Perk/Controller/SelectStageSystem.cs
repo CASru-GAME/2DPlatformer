@@ -17,13 +17,14 @@ namespace Scene.Controller
             this.currentPickCount = currentPickCount;
             selectedStageStorage.SetRandomIDs(currentPickCount);
             for (int i = 0; i < selectedStageStorage.CurrentPerkIDs.Length; i++)
-                perkView.SetPerkText(i, selectedStageStorage.CurrentPerkIDs[i], selectedStageStorage.CurrentStageIDs[i], selectedStageStorage.CurrentGimmickIDs[i], selectedStageStorage.CurrentDirectionIDs[i]);
+                perkView.SetPerkSelectView(i, selectedStageStorage.CurrentPerkIDs[i], selectedStageStorage.CurrentStageIDs[i], selectedStageStorage.CurrentGimmickIDs[i], selectedStageStorage.CurrentDirectionIDs[i]);
             perkView.OpenPerk(currentPickCount);
         }
 
         public void SelectStage(int boxNumber)
         {
             selectedStageStorage.SelectStage(boxNumber, currentPickCount);
+            perkView.SetStageImage(selectedStageStorage.CurrentDirectionIDs[boxNumber], selectedStageStorage.CurrentStageIDs[boxNumber]);
         }
     }
 }

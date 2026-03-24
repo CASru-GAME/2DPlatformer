@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: LfAddJp
   m_EditorClassIdentifier: Assembly-CSharp::Perk.Data.PerkViewData
   id: 6
-  sprite: {fileID: 0}
-  effectDescription: "\u52B9\u679C"
-  stageDescription: "\u30B9\u30C6\u30FC\u30B8\u5909\u5316"
-  perkTextCommonData: {fileID: 11400000, guid: 4d35e886d9abc7041937585227060ca0, type: 2}
+  sprite: {fileID: -1267013099507307020, guid: 9d012239ae9026049816909330a74a12, type: 3}
+  effectDescription: "\u30E9\u30A4\u30D5\u304C2\u4EE5\u4E0B\u306E\u6642\u3001\u30B8\u30E3\u30F3\u30D7\u56DE\u6570+1"

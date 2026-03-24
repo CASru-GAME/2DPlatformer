@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f80e0c245456a4e478cf96949f80a13b, type: 3}
   m_Name: Warp
   m_EditorClassIdentifier: Assembly-CSharp::Perk.Data.PerkViewData
-  id: 21
-  sprite: {fileID: 0}
-  effectDescription: "\u52B9\u679C"
-  stageDescription: "\u30B9\u30C6\u30FC\u30B8\u5909\u5316"
-  perkTextCommonData: {fileID: 11400000, guid: 4d35e886d9abc7041937585227060ca0, type: 2}
+  id: 19
+  sprite: {fileID: -2932770131381850177, guid: 9d012239ae9026049816909330a74a12, type: 3}
+  effectDescription: "\u30E9\u30F3\u30C0\u30E0\u306A\u4F4D\u7F6E\u306B\u30EF\u30FC\u30D7\u3059\u308B(2\u56DE\u307E\u3067)"

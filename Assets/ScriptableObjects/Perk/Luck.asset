@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: Luck
   m_EditorClassIdentifier: Assembly-CSharp::Perk.Data.PerkViewData
   id: 8
-  sprite: {fileID: 0}
-  effectDescription: "\u52B9\u679C"
-  stageDescription: "\u30B9\u30C6\u30FC\u30B8\u5909\u5316"
-  perkTextCommonData: {fileID: 11400000, guid: 4d35e886d9abc7041937585227060ca0, type: 2}
+  sprite: {fileID: 3910579023515958479, guid: 9d012239ae9026049816909330a74a12, type: 3}
+  effectDescription: "\u78BA\u7387\u304C25%\u5897\u52A0\u3059\u308B"

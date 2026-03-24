@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f80e0c245456a4e478cf96949f80a13b, type: 3}
   m_Name: Glide
   m_EditorClassIdentifier: Assembly-CSharp::Perk.Data.PerkViewData
-  id: 12
-  sprite: {fileID: 0}
-  effectDescription: "\u52B9\u679C"
-  stageDescription: "\u30B9\u30C6\u30FC\u30B8\u5909\u5316"
-  perkTextCommonData: {fileID: 11400000, guid: 4d35e886d9abc7041937585227060ca0, type: 2}
+  id: 17
+  sprite: {fileID: -3956632214865822500, guid: 9d012239ae9026049816909330a74a12, type: 3}
+  effectDescription: "\u6ED1\u7A7A\u304C\u53EF\u80FD\u306B\u306A\u308B"
