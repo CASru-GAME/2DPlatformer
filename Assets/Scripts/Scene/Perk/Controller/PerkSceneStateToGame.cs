@@ -15,6 +15,7 @@ namespace Scene.Controller
         public void OnEnter()
         {
             SceneManager.LoadScene(sM.SceneNameData.GameSceneName);
+            SceneManager.LoadScene("CurrentPerkList", LoadSceneMode.Additive);
         }
 
         public void HandleInput()

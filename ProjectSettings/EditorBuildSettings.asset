@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Dev/Syou.unity
     guid: 2c3132ba727ebeb43add8c9d71224789
+  - enabled: 1
+    path: Assets/Scenes/Dev/CurrentPerkList.unity
+    guid: 8c8597e436ad2c64489c587402cfcb4b
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
