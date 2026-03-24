@@ -1397,6 +1397,8 @@ MonoBehaviour:
   UpSideStage: {fileID: 5493761192250881359, guid: a21ff9e6b0041314481682dc0575a47a, type: 3}
   SideDownStage: {fileID: 4732498625839902999, guid: 7b6ecc040bc8c7442b032954f6f6b5cd, type: 3}
   DownSideStage: {fileID: 8305096562292112771, guid: 585c8173cf84c8f4f912bd23f04ca7cd, type: 3}
+  StartStage: {fileID: 8010877135519720254, guid: 0b08649c8dcd29143949507c8b787370, type: 3}
+  GoalStage: {fileID: 8918904195635858936, guid: 9940f14b430ca074b8178734c94ec397, type: 3}
 --- !u!1001 &233440356971574629
 PrefabInstance:
   m_ObjectHideFlags: 0

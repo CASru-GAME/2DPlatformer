@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: DistanceResetJp
   m_EditorClassIdentifier: Assembly-CSharp::Perk.Data.PerkViewData
   id: 18
-  sprite: {fileID: 0}
-  effectDescription: "\u52B9\u679C"
-  stageDescription: "\u30B9\u30C6\u30FC\u30B8\u5909\u5316"
-  perkTextCommonData: {fileID: 11400000, guid: 4d35e886d9abc7041937585227060ca0, type: 2}
+  sprite: {fileID: 5513059072381971404, guid: 9d012239ae9026049816909330a74a12, type: 3}
+  effectDescription: "\u6700\u5F8C\u306E\u63A5\u5730\u5730\u70B9\u304B\u30895\u30D6\u30ED\u30C3\u30AF\u4EE5\u4E0A\u96E2\u308C\u305F\u3089\u30B8\u30E3\u30F3\u30D7\u56DE\u6570\u3092\u30EA\u30BB\u30C3\u30C8\u3059\u308B"

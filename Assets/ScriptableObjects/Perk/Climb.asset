@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: Climb
   m_EditorClassIdentifier: Assembly-CSharp::Perk.Data.PerkViewData
   id: 15
-  sprite: {fileID: 0}
-  effectDescription: "\u52B9\u679C"
-  stageDescription: "\u30B9\u30C6\u30FC\u30B8\u5909\u5316"
-  perkTextCommonData: {fileID: 11400000, guid: 4d35e886d9abc7041937585227060ca0, type: 2}
+  sprite: {fileID: 1362801684315146967, guid: 9d012239ae9026049816909330a74a12, type: 3}
+  effectDescription: "\u58C1\u30AD\u30C3\u30AF\u304C\u53EF\u80FD\u306B\u306A\u308B"
