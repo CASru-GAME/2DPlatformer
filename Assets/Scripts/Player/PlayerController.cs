@@ -281,13 +281,13 @@ public class PlayerController : MonoBehaviour
         //地面にいるなら跳べる
         if (isGrounded || remainJumpCount > 0)
         {
-            //ジャンプイベントの通知
-            PerkEvents.Jump?.Invoke();
-
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0); // ジャンプ前に一度垂直速度をリセットしてからジャンプ力を加える
             
             // ジャンプの処理（ジャンプ力の倍率も適用）
             ApplyJump(perk.JumpPowerMultiplier);
+
+            //ジャンプイベントの通知
+            PerkEvents.Jump?.Invoke();
 
             //空中ジャンプの回数を減らす
             if (!isGrounded)
