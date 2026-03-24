@@ -15,6 +15,7 @@ namespace Scene.Controller
         public void OnEnter()
         {
             sM.PerkView.OpenInitial();
+            SceneManager.LoadScene("CurrentPerkList", LoadSceneMode.Additive);
         }
 
         public void HandleInput()

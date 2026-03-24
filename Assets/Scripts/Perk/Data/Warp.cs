@@ -5,8 +5,6 @@ namespace Perk.Data
 {
     public class Warp : PerkEffect
     {
-        private int useStack = 0;
-
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Initialize()
         {
@@ -16,24 +14,25 @@ namespace Perk.Data
         public override void Add()
         {
             Stack++;
-            useStack += 2;
+            UseStack += 2;
             if(Stack != 1) return;
             PerkEvents.UsePerk += OnUsePerk;
+            PerkEffectStorage.AddUsePerk(19);
         }
 
         public override void Remove()
         {
             Stack--;
-            useStack -= 2;
+            UseStack = Mathf.Max(0, UseStack - 2);
             if(Stack != 0) return;
             PerkEvents.UsePerk -= OnUsePerk;
         }
 
         private void OnUsePerk(int id)
         {
-            if(id != 19) return;
-            Remove();
-            PerkEffectReference.Instance.WarpStack = useStack;
+            if(id != 19 || UseStack <= 0) return;
+            UseStack = Mathf.Max(0, UseStack - 1);
+            PerkEffectReference.Instance.WarpStack = UseStack;
         }
     }
 }
