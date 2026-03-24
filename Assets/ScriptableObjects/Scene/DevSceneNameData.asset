@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Scene.Data.SceneNameData
   titleSceneName: DevTitle
   perkSceneName: DevPerk
-  gameSceneName: Syou
+  gameSceneName: TestrRun
