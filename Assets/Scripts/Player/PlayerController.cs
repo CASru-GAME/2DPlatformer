@@ -193,7 +193,13 @@ public class PlayerController : MonoBehaviour
         Vector2 groundCheckPos = (Vector2)transform.position + Vector2.down * groundCheckOffset;
         bool isGrounded = Physics2D.OverlapBox(groundCheckPos, groundCheckSize, 0f, groundLayer);
 
-        // ★着地イベントの通知
+        // デバッグ用：ジャンプ入力と接地状態をログに表示
+        if (jumpDown)
+        {
+            Debug.Log($"ジャンプボタンを押した (接地: {isGrounded}) 残りジャンプ回数: {remainJumpCount}");
+        }
+
+        //着地イベントの通知
         if (isGrounded && !lastGrounded) // lastGroundedという変数を作って前回と比較
         {
             PerkEvents.Land?.Invoke();
@@ -278,6 +284,8 @@ public class PlayerController : MonoBehaviour
             //ジャンプイベントの通知
             PerkEvents.Jump?.Invoke();
 
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0); // ジャンプ前に一度垂直速度をリセットしてからジャンプ力を加える
+            
             // ジャンプの処理（ジャンプ力の倍率も適用）
             ApplyJump(perk.JumpPowerMultiplier);
 
@@ -318,7 +326,7 @@ public class PlayerController : MonoBehaviour
         
         
         //壁つかまりのパーク
-        if (isWalled && perk.CanClimb && !isGrounded && rb.linearVelocity.y <= 0.01f)
+        if (isWalled && perk.CanClimb && !isGrounded && rb.linearVelocity.y <= 0.1f)
         {
             rb.linearVelocity = new Vector2(0, 0); // 止まる
             rb.gravityScale = 0; // 重力の影響を消す
@@ -327,7 +335,7 @@ public class PlayerController : MonoBehaviour
     
         //滞空のパーク
         // 落下中(y < 0)にジャンプボタンを押し続けていれば重力を軽くする
-        if (!isGrounded && isJumpHolding && perk.CanGlide && rb.linearVelocity.y < 0)
+        if (!isGrounded && isJumpHolding && perk.CanGlide && rb.linearVelocity.y < -0.1f)
         {
             rb.gravityScale = defaultGravityScale * glideGravityMultiplier; // 重力をglideGravityMultiplier倍にしてゆっくり落とす
         }
@@ -337,14 +345,20 @@ public class PlayerController : MonoBehaviour
             rb.gravityScale = defaultGravityScale; 
         }
         
+        //
+        float currentYVelocity = rb.linearVelocity.y;
+        
         // 物理速度を更新（左右移動のみ。縦はrb.velocity.yを維持）
-        rb.linearVelocity = new Vector2(targetHorizontalVelocity, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(targetHorizontalVelocity, currentYVelocity);
     }
 
     private void ApplyJump(float jumpPowerMultiplier = 1.0f)
     {
+        //jumpFoorceが正であることを確認
+        float force = jumpForce * jumpPowerMultiplier;
         // 上方向に力を加える
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * jumpPowerMultiplier);
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, force);
+        Debug.Log($"ジャンプ実行　現在の速度: {rb.linearVelocity} ジャンプ力の倍率: {jumpPowerMultiplier}");
     }
 
     private bool CheckWall(float horizontalInput)
