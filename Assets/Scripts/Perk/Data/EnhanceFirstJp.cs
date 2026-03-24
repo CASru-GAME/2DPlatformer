@@ -32,14 +32,14 @@ namespace Perk.Data
 
         private void OnLand()
         {
-            if(!isCharging) return;
+            if(isCharging) return;
             isCharging = true;
             PerkEffectReference.Instance.JumpPowerMultiplier += Stack * 0.5f;
         }
 
         private void OnJump()
         {
-            if(!isCharging) return;
+            if(isCharging) return;
             isCharging = false;
             PerkEffectReference.Instance.JumpPowerMultiplier -= Stack * 0.5f;
         }
