@@ -1,11 +1,13 @@
 using UnityEngine;
 using Perk.Model;
+using System;
 
 namespace Perk.Data
 {
     public class EnhanceFirstJp : PerkEffect
     {
-        float defaultJumpPowerMultiplier = 1f;
+        private bool isCharging = false;
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Initialize()
         {
@@ -30,13 +32,16 @@ namespace Perk.Data
 
         private void OnLand()
         {
-            defaultJumpPowerMultiplier = PerkEffectReference.Instance.JumpPowerMultiplier;
+            if(!isCharging) return;
+            isCharging = true;
             PerkEffectReference.Instance.JumpPowerMultiplier += Stack * 0.5f;
         }
 
         private void OnJump()
         {
-            PerkEffectReference.Instance.JumpPowerMultiplier = defaultJumpPowerMultiplier;
+            if(!isCharging) return;
+            isCharging = false;
+            PerkEffectReference.Instance.JumpPowerMultiplier -= Stack * 0.5f;
         }
     }
 }
