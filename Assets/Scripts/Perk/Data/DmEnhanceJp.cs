@@ -39,7 +39,7 @@ namespace Perk.Data
 
         private void OnJump()
         {
-            PerkEffectReference.Instance.JumpPowerMultiplier -= Stack; 
+            if(isCharging) PerkEffectReference.Instance.JumpPowerMultiplier -= Stack; 
             isCharging = false;
         }
     }

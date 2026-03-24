@@ -23,5 +23,7 @@ namespace Perk.Data
         public static Action<int> CopyPerk;
         //毎フレーム
         public static Action Update;
+        //空中にいるとき
+        public static Action InAir;
     }
 }
