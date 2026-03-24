@@ -1,5 +1,6 @@
 using UnityEngine;
 using Perk.Model;   //パークの参照
+using Perk.Data;    //パークのイベント
 
 public class PlayerController : MonoBehaviour
 {
@@ -25,6 +26,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer; // プレイヤーの画像
     [SerializeField] private GameObject shieldObject; // シールドの画像オブジェクト
 
+    private bool lastGrounded; // 前フレームの接地状態を保存する変数
+    
     //現在点滅中か（初期は点滅していない）
     private bool isFlashing = false;
     
@@ -113,6 +116,11 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        // 毎フレームの通知
+        PerkEvents.CheckLife?.Invoke(status.CurrentLives);
+        PerkEvents.CheckPosition?.Invoke(transform.position);
+        PerkEvents.Update?.Invoke();
+
         //入力の取得をする関数を空の状態で定義
         moveInput = 0;
         jumpDown = false;
@@ -185,6 +193,13 @@ public class PlayerController : MonoBehaviour
         Vector2 groundCheckPos = (Vector2)transform.position + Vector2.down * groundCheckOffset;
         bool isGrounded = Physics2D.OverlapBox(groundCheckPos, groundCheckSize, 0f, groundLayer);
 
+        // ★着地イベントの通知
+        if (isGrounded && !lastGrounded) // lastGroundedという変数を作って前回と比較
+        {
+            PerkEvents.Land?.Invoke();
+        }
+        lastGrounded = isGrounded;
+        
         // 壁に接触しているかの判定
         bool isWalled = CheckWall(moveInput);
 
@@ -201,7 +216,6 @@ public class PlayerController : MonoBehaviour
         //空中ジャンプ回数のリセット
         if (isGrounded)
         {
-            //基本１回(最初のジャンプ用) + 追加のジャンプ回数
             remainJumpCount = 1 + perk.AdditionalJumpCount; //地面にいるときは追加ジャンプ回数+1回ジャンプできる
         }
         
@@ -249,6 +263,7 @@ public class PlayerController : MonoBehaviour
                 //壁キック後は通常のジャンプ処理は行わない
                 return;
             }
+            
         }
         
         //壁つかまりのパークがあって壁についているときはジャンプできない
@@ -258,15 +273,19 @@ public class PlayerController : MonoBehaviour
         }
 
         //地面にいるなら跳べる
-        if (isGrounded)
+        if (isGrounded || remainJumpCount > 0)
         {
+            //ジャンプイベントの通知
+            PerkEvents.Jump?.Invoke();
+
+            // ジャンプの処理（ジャンプ力の倍率も適用）
             ApplyJump(perk.JumpPowerMultiplier);
-        }
-        //空中にいるが、ジャンプ回数が残っているなら「空中ジャンプ」
-        else if (remainJumpCount > 0)
-        {
-            ApplyJump(perk.JumpPowerMultiplier);
-            remainJumpCount--; // 回数を1減らす
+
+            //空中ジャンプの回数を減らす
+            if (!isGrounded)
+            {
+                remainJumpCount--;
+            }
         }
     }
     
@@ -410,13 +429,39 @@ public class PlayerController : MonoBehaviour
     {
         var perk = PerkEffectReference.Instance;
         
+        //無敵中はダメージ判定を行わない
+        if (perk.IsInvincible)
+        {
+            Debug.Log("ダメージを受けない（無敵状態）");
+            return;
+        }
+        
+        PerkEvents.Damaged?.Invoke(); // ダメージを受けたイベントを通知
+        
+        //強制ジャンプのパークがある場合
+        if (perk.IsForcedJump)
+        {
+            ApplyJump(perk.JumpPowerMultiplier); // ジャンプ力の倍率も適用
+            Debug.Log("強制ジャンプ");
+
+            //空中ジャンプ回数をリセット
+            remainJumpCount = perk.AdditionalJumpCount;
+            
+            //強制ジャンプのスタックを減らす
+            perk.ForcedJumpStack--;
+            Debug.Log($"残り強制ジャンプスタック: {perk.ForcedJumpStack}");
+            
+            //強制ジャンプさせた後はダメージを受けないように無敵時間を付与（例: 1秒間無敵）
+            perk.InvincibleSeconds = 1f;
+            return;
+        }
+        
         //PlayerStatusの方でダメージを受けるかどうかを判定してもらう
         if (status.CanTakeDamage())
         {
             Debug.Log("ダメージを受ける");
             status.DecreaseLife();
 
-            //無敵時間を付与（例: 2秒間無敵）
             perk.InvincibleSeconds = 2f;
 
         }
