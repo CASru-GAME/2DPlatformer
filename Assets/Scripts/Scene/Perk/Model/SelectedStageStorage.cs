@@ -30,9 +30,9 @@ namespace Scene.Model
         public void SetRandomIDs(int currentPickCount)
         {
             SetRandomPerkID();
+            SetRandomDirectionID(currentPickCount);
             SetRandomStageID();
             SetRandomGimmickID();
-            SetRandomDirectionID(currentPickCount);
         }
         
         private void SetRandomPerkID()
@@ -47,7 +47,7 @@ namespace Scene.Model
         private void SetRandomStageID()
         {
             for (int i = 0; i < currentStageIDs.Length; i++)
-                currentStageIDs[i] = Random.Range(1, MaxStageID + 1);
+                currentStageIDs[i] = currentDirectionIDs[i] == 1 ? Random.Range(1, 11) : Random.Range(11, MaxStageID + 1);
         }
 
         private void SetRandomGimmickID()
