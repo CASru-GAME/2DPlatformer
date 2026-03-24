@@ -8,7 +8,10 @@ namespace Perk.Model
     public static class PerkEffectStorage
     {
         private static readonly List<(int id, PerkEffect perkEffect)> enabledPerkList = new();
+        public static IReadOnlyList<(int id, PerkEffect perkEffect)> EnabledPerkList => enabledPerkList;
         private static readonly Dictionary<int, Func<PerkEffect>> perkDictionary = new();
+        private static readonly List<(int id, PerkEffect perkEffect)> usePerkList = new();
+        public static IReadOnlyList<(int id, PerkEffect perkEffect)> UsePerkList => usePerkList;
 
         public static void RegisterPerk(int id, Func<PerkEffect> perkEffectFactory)
         {
@@ -42,6 +45,23 @@ namespace Perk.Model
             }
         }
 
+        public static void AddAllPerk()
+        {
+            foreach (var perk in perkDictionary)
+            {
+                if(perk.Key == 0 || perk.Key == 22) continue;
+                AddPerk(perk.Key);
+            }
+        }
+
+        public static void AddUsePerk(int id)
+        {
+            for(int i = 0; i < usePerkList.Count; i++)
+                if(usePerkList[i].id == id) return;
+            
+            usePerkList.Add((id, enabledPerkList.Find(perk => perk.id == id).perkEffect));
+        }
+
         public static void RemovePerkAtRandom()
         {
             if (enabledPerkList.Count == 0)
@@ -63,10 +83,8 @@ namespace Perk.Model
 
         public static int GetPerkIDAtRandom()
         {
-            List<int> keys = new(perkDictionary.Keys);
-            Debug.Log(keys.Count);
-            int randomIndex = UnityEngine.Random.Range(1, keys.Count);
-            return keys[randomIndex];
+            int randomIndex = UnityEngine.Random.Range(1, perkDictionary.Count);
+            return randomIndex;
         }
     }
 }

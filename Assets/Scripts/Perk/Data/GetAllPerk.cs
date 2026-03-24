@@ -14,6 +14,7 @@ namespace Perk.Data
         public override void Add()
         {
             Stack++;
+            PerkEffectStorage.AddAllPerk();
             if(Stack != 1) return;
             PerkEvents.Land += OnLand;    
         }
