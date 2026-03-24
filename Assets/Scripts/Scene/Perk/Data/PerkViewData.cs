@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Perk.Data
+namespace Scene.Data
 {
     [CreateAssetMenu(fileName = "PerkViewData", menuName = "ScriptableObjects/PerkViewData", order = 1)]
     public class PerkViewData : ScriptableObject
@@ -10,9 +10,6 @@ namespace Perk.Data
         [SerializeField] private Sprite sprite;
         public Sprite Sprite => sprite;
         [SerializeField] private string effectDescription;
-        [SerializeField] private string stageDescription;
-        [SerializeField] private PerkTextCommonData perkTextCommonData;
-
-        public string Description => perkTextCommonData.GetPerkDescription(effectDescription, stageDescription);
+        public string Description => effectDescription;
     }
 }

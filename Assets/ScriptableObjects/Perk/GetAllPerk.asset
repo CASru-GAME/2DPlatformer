@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: GetAllPerk
   m_EditorClassIdentifier: Assembly-CSharp::Perk.Data.PerkViewData
   id: 22
-  sprite: {fileID: 0}
-  effectDescription: "\u52B9\u679C"
-  stageDescription: "\u30B9\u30C6\u30FC\u30B8\u5909\u5316"
-  perkTextCommonData: {fileID: 11400000, guid: 4d35e886d9abc7041937585227060ca0, type: 2}
+  sprite: {fileID: -2948331481830551589, guid: 9d012239ae9026049816909330a74a12, type: 3}
+  effectDescription: "\u3059\u3079\u3066\u306E\u30D1\u30FC\u30AF\u3092\u7372\u5F97\u3057\u3001\u7740\u5730\u3059\u308B\u3054\u3068\u306B\u30D1\u30FC\u30AF\u304C\u6D88\u3048\u3066\u3044\u304F"
