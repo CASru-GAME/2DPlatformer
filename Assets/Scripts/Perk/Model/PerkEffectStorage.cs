@@ -12,12 +12,14 @@ namespace Perk.Model
         private static readonly Dictionary<int, Func<PerkEffect>> perkDictionary = new();
         private static readonly List<(int id, PerkEffect perkEffect)> usePerkList = new();
         public static IReadOnlyList<(int id, PerkEffect perkEffect)> UsePerkList => usePerkList;
+        private static readonly List<int> perkIDList = new();
 
         public static void RegisterPerk(int id, Func<PerkEffect> perkEffectFactory)
         {
-            if (!perkDictionary.ContainsKey(id))
+            if (!perkDictionary.ContainsKey(id) && id > 0)
             {
                 perkDictionary.Add(id, perkEffectFactory);
+                perkIDList.Add(id);
             }
             else
             {
@@ -83,8 +85,9 @@ namespace Perk.Model
 
         public static int GetPerkIDAtRandom()
         {
-            int randomIndex = UnityEngine.Random.Range(1, perkDictionary.Count);
-            return randomIndex;
+            
+            int randomIndex = UnityEngine.Random.Range(0, perkIDList.Count);
+            return perkIDList[randomIndex];
         }
     }
 }

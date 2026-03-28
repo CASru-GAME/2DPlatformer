@@ -51,5 +51,10 @@ namespace Scene.Controller
         {
             selectPerkSystem.SetRandomIDs(currentPerkCount);
         }
+
+        public void ToNextDelay(float delay)
+        {
+            Invoke(nameof(ToNext), delay);
+        }
     }
 }

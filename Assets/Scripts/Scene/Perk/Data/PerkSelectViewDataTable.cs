@@ -61,5 +61,11 @@ namespace Scene.Data
                     return data.Description;
             return GetGimmickDescription(0);
         }
+
+        public string GetPerkColoredDescription(int perkID)
+        {
+            string description = GetPerkDescription(perkID);
+            return $"<color=#{ColorUtility.ToHtmlStringRGB(perkEffectColor)}>{description}</color>";
+        }
     }
 }
