@@ -15,8 +15,7 @@ public class PlayerStatus
     // コンストラクタ：ゲーム開始時の残機を設定
     public PlayerStatus(int initialLives)
     {
-        var perk = PerkEffectReference.Instance;
-        MaxLives = initialLives + perk.AdditionalMaxLife;
+        MaxLives = initialLives;
         CurrentLives = MaxLives;
     }
 
@@ -47,6 +46,17 @@ public class PlayerStatus
         return true;
     }
 
+    public void InitializeStatus()
+    {
+        var perk = PerkEffectReference.Instance;
+        if (perk != null)
+        {
+            MaxLives += perk.AdditionalMaxLife; // パークの追加残機を反映
+            CurrentLives = MaxLives; // 現在の残機も最大に合わせて更新
+        }
+        OnLivesChanged?.Invoke(CurrentLives);
+    }
+    
     // 残機を減らす
     public void DecreaseLife()
     {

@@ -9,7 +9,8 @@ public enum PlayerState
     Jump,
     Fall,
     Climb,  //壁つかまり
-    Glide   //滑空
+    Glide,  //滑空
+    Ladder //はしご
 }
 
 //プレイヤーの動作を管理するクラス
@@ -26,8 +27,14 @@ public class PlayerMove
 
     //horizontalInput: -1 (左), 0 (なし), 1 (右)の横方向の入力値
     //verticalVelocity: プレイヤーの垂直速度
-    public void UpdateState(float horizontalInput, float verticalVelocity, bool isJumpPressed, bool isDashPressed, bool isGrounded, bool isClimbing, bool isGliding)
+    public void UpdateState(float horizontalInput, float verticalVelocity, float verticalInput, bool isJumpPressed, bool isDashPressed, bool isGrounded, bool isClimbing, bool isGliding, bool isLadderClimbing)
     {
+        if (isLadderClimbing && Mathf.Abs(verticalInput) > 0.1f)
+        {
+            currentState = PlayerState.Ladder;
+            return;
+        }
+
         if (isClimbing)
         {
             currentState = PlayerState.Climb;
@@ -146,6 +153,22 @@ public class PlayerMove
                 else if (!isGliding)
                 {
                     currentState = PlayerState.Fall;
+                }
+                break;
+
+            //はしご状態からの遷移
+            case PlayerState.Ladder:
+                if (isGrounded && verticalInput < -0.1f)
+                {
+                    currentState = PlayerState.Idle;
+                }
+                else if (isJumpPressed)
+                {
+                    currentState = PlayerState.Jump;
+                }
+                else if (!isLadderClimbing)
+                {
+                    currentState = isGrounded ? PlayerState.Idle : PlayerState.Fall;
                 }
                 break;
         }
