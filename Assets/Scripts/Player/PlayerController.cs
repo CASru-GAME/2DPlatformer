@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [Header("移動設定")]
     [SerializeField] private float walkSpeed = 5f;
     [SerializeField] private float dashSpeed = 10f;
+    [SerializeField] private float ladderSpeed = 5f;
     [SerializeField] private float jumpForce = 12f;
 
     [Header("判定設定")]
@@ -51,6 +52,8 @@ public class PlayerController : MonoBehaviour
     private bool jumpDown;
     private bool jumpHold;
     private bool dash;
+    private float verticalInput;
+    private bool canLadderClimb; //はしごに登れるかどうかのフラグ
     private float lockTimer; //実際に操作不能時間を操作するタイマーの変数(初期値は0)
     
     // パーク用の変数
@@ -98,6 +101,12 @@ public class PlayerController : MonoBehaviour
     {
         // 初期位置をrespawnPositionに設定
         respawnPosition = transform.position;
+
+        // パークの初期化
+        if (status != null)
+        {
+            status.InitializeStatus();
+        }
     }
 
     // Update is called once per frame
@@ -123,6 +132,7 @@ public class PlayerController : MonoBehaviour
 
         //入力の取得をする関数を空の状態で定義
         moveInput = 0;
+        verticalInput = 0;
         jumpDown = false;
         jumpHold = false;
         dash = false;
@@ -137,6 +147,7 @@ public class PlayerController : MonoBehaviour
             // GetKey：押しっぱなし（滞空/グライド判定用）
             jumpHold = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow); // ジャンプボタンを押し続けているか
             dash = Input.GetKey(KeyCode.LeftShift); 
+            verticalInput = Input.GetAxisRaw("Vertical");
         }
         else
         {
@@ -225,12 +236,11 @@ public class PlayerController : MonoBehaviour
             remainJumpCount = 1 + perk.AdditionalJumpCount; //地面にいるときは追加ジャンプ回数+1回ジャンプできる
         }
         
-        psm.UpdateState(effectiveInput, rb.linearVelocity.y, jumpDown, dash, isGrounded, isClimbing, isGliding);
+        psm.UpdateState(effectiveInput, rb.linearVelocity.y, verticalInput, jumpDown, dash, isGrounded, isClimbing, isGliding, canLadderClimb);
         
         //実際の移動処理に引数を追加してパーク対応
         //滞空判定に使うのでjumpHoldを渡す
-        ApplyMovement(effectiveInput, isWalled, isGrounded, jumpHold, perk);
-
+        ApplyMovement(effectiveInput, isWalled, isGrounded, jumpHold, perk, canLadderClimb);
         //ジャンプ処理を空中ジャンプ対応の「HandleJump」に変更
         //ジャンプの実行なのでjumpDownを使う
         if (jumpDown)
@@ -297,7 +307,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    private void ApplyMovement(float input, bool isWalled, bool isGrounded, bool isJumpHolding, PerkEffectReference perk)
+    private void ApplyMovement(float input, bool isWalled, bool isGrounded, bool isJumpHolding, PerkEffectReference perk, bool canLadderClimb)
     {
         //壁キックの操作不能時間は左右の速度更新をさせない
         if (lockTimer > 0)
@@ -324,6 +334,18 @@ public class PlayerController : MonoBehaviour
             targetHorizontalVelocity = input * speed; 
         }
         
+        //梯子の状態のときは上下の入力を受け付ける
+        if (psm.CurrentState == PlayerState.Ladder)
+        {
+            //はしごに触れているときの上下の移動処理
+            rb.gravityScale = 0; //重力の影響を消す
+            
+            //左右移動と上下移動を両方適用する
+            float vVelocity = verticalInput * ladderSpeed; // 上下の入力で移動する速度
+            float hVelocity = targetHorizontalVelocity; // 左右の入力で移動する速度
+            rb.linearVelocity = new Vector2(hVelocity, vVelocity); // 上下の入力で移動する
+            return; // はしご状態のときはこれ以上の移動処理をしない
+        }
         
         //壁つかまりのパーク
         if (isWalled && perk.CanClimb && !isGrounded && rb.linearVelocity.y <= 0.1f)
@@ -344,7 +366,7 @@ public class PlayerController : MonoBehaviour
             // 通常時は元の重力に戻す
             rb.gravityScale = defaultGravityScale; 
         }
-        
+
         //
         float currentYVelocity = rb.linearVelocity.y;
         
@@ -429,6 +451,8 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawWireCube((Vector2)transform.position + Vector2.left * wallCheckOffset, wallCheckSize);
     }
 
+    
+    
     // ミス判定（例：トゲに触れた等）
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -439,6 +463,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+       if (collision.gameObject.CompareTag("Ladder"))
+         {
+              canLadderClimb = true; // はしごに触れたら登れるようにする
+         }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ladder"))
+        {
+            canLadderClimb = false; // はしごから離れたら登れなくする
+        }
+    }
+ 
     private void Miss()
     {
         var perk = PerkEffectReference.Instance;
