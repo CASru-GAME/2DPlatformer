@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Hazard
   - Ladder
+  - DeathZone
   layers:
   - Default
   - TransparentFX
