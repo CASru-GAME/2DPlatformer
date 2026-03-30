@@ -54,6 +54,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField, ReadOnly] private bool debugIsClimbing; // 壁つかまり状態かどうかのフラグ（インスペクターで確認できるようにする）
     [SerializeField, ReadOnly] private int debugRemainJumpCount; // 残りのジャンプ回数（インスペクターで確認できるようにする）
     [SerializeField, ReadOnly] private PlayerState debugCurrentState; // 現在の状態（インスペクターで確認できるようにする）
+    [SerializeField, ReadOnly] private int debugCurrentLives; // 現在の残機（インスペクターで確認できるようにする）
     
     //入力などの内部処理に使う変数
     private float moveInput;
@@ -263,6 +264,7 @@ public class PlayerController : MonoBehaviour
         debugIsClimbing = isClimbing;
         debugRemainJumpCount = remainJumpCount;
         debugCurrentState = psm.CurrentState;
+        debugCurrentLives = status.CurrentLives;
         
         //アニメーションの更新
         UpdateAnimation();
@@ -477,14 +479,23 @@ public class PlayerController : MonoBehaviour
         {
             Miss();
         }
+
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
        if (collision.gameObject.CompareTag("Ladder"))
-         {
-              canLadderClimb = true; // はしごに触れたら登れるようにする
-         }
+        {
+            canLadderClimb = true; // はしごに触れたら登れるようにする
+        }
+
+        //落下死用のトリガー（例：画面下に落ちたときなど）
+        if (collision.gameObject.CompareTag("DeathZone"))
+        {
+            Debug.Log("落下死");
+            status.ForceGameOver();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
