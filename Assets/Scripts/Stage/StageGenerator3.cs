@@ -35,12 +35,13 @@ public class StageGenerator3 : MonoBehaviour
             GameObject prefab = prefabManager.stagePrefabs[stage - 1];
 
             GameObject gimmickPrefab = gimmicks[gimmick - 1];
-            Transform parent = spawnPoints[stage - 1];
+            Transform gimPos = spawnPoints[stage - 1];
+            //Transform parent = spawnPoints[stage - 1];
 
-            foreach (Transform child in parent)
-            {
-                Instantiate(gimmickPrefab, child.position, Quaternion.identity);
-            }
+            //foreach (Transform child in parent)
+            //{
+            //    Instantiate(gimmickPrefab, child.position, Quaternion.identity);
+            //}
 
             if (previousDirection == 1)
             {
@@ -75,10 +76,6 @@ public class StageGenerator3 : MonoBehaviour
                     position = new Vector3(position.x, position.y + 10, position.z);
                 }
 
-                //if (direction == 2) //上から下(不可)
-                //{
-                //    position = new Vector3(position.x, position.y - 10, position.z);
-                //}
             }
 
             if (previousDirection == 3)
@@ -89,11 +86,6 @@ public class StageGenerator3 : MonoBehaviour
                         position = new Vector3(position.x + 10, position.y - 10, position.z);
                     }
 
-                //if (direction == 1) //下から上(不可)
-                //    {
-                //        position = new Vector3(position.x, position.y + 10, position.z);
-                //    }
-
                 if (direction == 3) //下から下
                     {
                         position = new Vector3(position.x, position.y - 10, position.z);
@@ -101,6 +93,13 @@ public class StageGenerator3 : MonoBehaviour
             }
 
             Instantiate(prefab, position, Quaternion.identity);
+            Instantiate(gimPos, position, Quaternion.identity);
+
+            foreach (Transform child in gimPos)
+            {
+                Instantiate(gimmickPrefab, child.position + position, child.rotation);
+            }
+
             previousDirection = direction;
         }
 
