@@ -47,6 +47,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Vector2 wallKickForce = new Vector2(10f, 12f); // 壁キックの力の大きさ
     [SerializeField] private float wallKickLockDuration = 0.2f; // 壁キックの操作不能期間
     
+    [Header("デバッグ用")]
+    [SerializeField, ReadOnly] private bool debugIsGrounded; // 地面に接地しているかどうかのフラグ（インスペクターで確認できるようにする）
+    [SerializeField, ReadOnly] private bool debugIsWalled; // 壁に接触しているかどうかのフラグ（インスペクターで確認できるようにする）
+    [SerializeField, ReadOnly] private bool debugIsNearWall; // 壁に近づいているかどうかのフラグ（インスペクターで確認できるようにする）
+    [SerializeField, ReadOnly] private bool debugIsClimbing; // 壁つかまり状態かどうかのフラグ（インスペクターで確認できるようにする）
+    [SerializeField, ReadOnly] private int debugRemainJumpCount; // 残りのジャンプ回数（インスペクターで確認できるようにする）
+    [SerializeField, ReadOnly] private PlayerState debugCurrentState; // 現在の状態（インスペクターで確認できるようにする）
+    
     //入力などの内部処理に使う変数
     private float moveInput;
     private bool jumpDown;
@@ -248,6 +256,14 @@ public class PlayerController : MonoBehaviour
             HandleJump(isGrounded, isNearWall, isWalled, perk);
         }
 
+        //デバッグ用の変数に値を入れる
+        debugIsGrounded = isGrounded;
+        debugIsWalled = isWalled;
+        debugIsNearWall = isNearWall;
+        debugIsClimbing = isClimbing;
+        debugRemainJumpCount = remainJumpCount;
+        debugCurrentState = psm.CurrentState;
+        
         //アニメーションの更新
         UpdateAnimation();
     }
@@ -430,9 +446,9 @@ public class PlayerController : MonoBehaviour
         //壁キックの操作不能時間をセットする
         lockTimer = wallKickLockDuration;
 
-        //壁キック後は空中ジャンプ回数を回復
-        var perk = PerkEffectReference.Instance;
-        remainJumpCount = perk.AdditionalJumpCount;
+        //壁キック後は空中ジャンプ回数を回復(いまのところ使わなそうなのでコメントアウト)
+        //var perk = PerkEffectReference.Instance;
+        //remainJumpCount = perk.AdditionalJumpCount;
     }
 
     // デバッグ用：地面と壁の判定の可視化
@@ -549,18 +565,22 @@ public class PlayerController : MonoBehaviour
         isFlashing = true;
         var perk = PerkEffectReference.Instance;
 
+        //元の色（RBG)と透明度（A）を保存しておく
+        Color originalColor = spriteRenderer.color;
+
         // 無敵時間が続く限り点滅を続ける
         while (perk.InvincibleSeconds > 0)
         {
             // 半透明にする
-            spriteRenderer.color = new Color(1f, 1f, 1f, 0.5f); // 半透明にする
+            Color dimmedColor = new (originalColor.r, originalColor.g, originalColor.b, 0.5f);
+            spriteRenderer.color = dimmedColor;
             yield return new WaitForSeconds(0.1f); // 点滅の速さ
             // 元の色に戻す
-            spriteRenderer.color = new Color(1f, 1f, 1f, 1f); // 元の色に戻す
+            spriteRenderer.color = originalColor; // 元の色に戻す
             yield return new WaitForSeconds(0.1f); // 点滅の速さ
 
         }
-        spriteRenderer.color = new Color(1f, 1f, 1f, 1f); // 念のため元の色に戻す
+        spriteRenderer.color = originalColor; // 念のため元の色に戻す
         isFlashing = false;
     }
 }

@@ -986,9 +986,9 @@ MonoBehaviour:
   dashSpeed: 8
   ladderSpeed: 5
   jumpForce: 11.3
-  groundCheckSize: {x: 0.9, y: 0.1}
+  groundCheckSize: {x: 0.8, y: 0.1}
   groundCheckOffset: 0.95
-  wallCheckSize: {x: 0.1, y: 1.6}
+  wallCheckSize: {x: 0.1, y: 1.8}
   wallCheckOffset: 0.45
   groundLayer:
     serializedVersion: 2
@@ -1003,6 +1003,12 @@ MonoBehaviour:
   glideGravityMultiplier: 0.1
   wallKickForce: {x: 7, y: 4.5}
   wallKickLockDuration: 0.45
+  debugIsGrounded: 0
+  debugIsWalled: 0
+  debugIsNearWall: 0
+  debugIsClimbing: 0
+  debugRemainJumpCount: 0
+  debugCurrentState: 0
 --- !u!212 &1486801859
 SpriteRenderer:
   m_ObjectHideFlags: 0
