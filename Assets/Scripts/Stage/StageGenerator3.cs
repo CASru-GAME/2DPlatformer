@@ -97,7 +97,7 @@ public class StageGenerator3 : MonoBehaviour
 
             foreach (Transform child in gimPos)
             {
-                Instantiate(gimmickPrefab, child.position, child.rotation);
+                Instantiate(gimmickPrefab, child.position + position, child.rotation);
             }
 
             previousDirection = direction;

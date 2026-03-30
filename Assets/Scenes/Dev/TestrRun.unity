@@ -119,6 +119,82 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &223278546
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 223278548}
+  - component: {fileID: 223278547}
+  m_Layer: 0
+  m_Name: StageGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &223278547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223278546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66e5937c7a892eb4f898fcfebb366b04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StageGenerator3
+  prefabManager: {fileID: 1461687131}
+  gimmicks:
+  - {fileID: 5790123047733674694, guid: 843f6701fdde86b4a99996585e4997a6, type: 3}
+  - {fileID: 5790123047733674694, guid: 843f6701fdde86b4a99996585e4997a6, type: 3}
+  - {fileID: 5790123047733674694, guid: 843f6701fdde86b4a99996585e4997a6, type: 3}
+  - {fileID: 5790123047733674694, guid: 843f6701fdde86b4a99996585e4997a6, type: 3}
+  - {fileID: 5790123047733674694, guid: 843f6701fdde86b4a99996585e4997a6, type: 3}
+  spawnPoints:
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 3842881192199041179, guid: f5af4af15e63f254e9410782b6e7ad69, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 8452616007218916866, guid: 41a239f7e9fa05a40b709b05785c8184, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 2679124092539243954, guid: 134e90df6e51d94429acecdb90686944, type: 3}
+  - {fileID: 7653259919297690695, guid: 99bd47578ab7f1a4f90369560430a1a3, type: 3}
+  - {fileID: 7567862168097189849, guid: d230127309390a74a9271ce09c74c2ae, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  SideUpStage: {fileID: 152312940673844924, guid: 1eb5b4270b6f8c74981bb3559490d483, type: 3}
+  UpSideStage: {fileID: 5493761192250881359, guid: a21ff9e6b0041314481682dc0575a47a, type: 3}
+  SideDownStage: {fileID: 4732498625839902999, guid: 7b6ecc040bc8c7442b032954f6f6b5cd, type: 3}
+  DownSideStage: {fileID: 8305096562292112771, guid: 585c8173cf84c8f4f912bd23f04ca7cd, type: 3}
+  StartStage: {fileID: 8010877135519720254, guid: 0b08649c8dcd29143949507c8b787370, type: 3}
+  GoalStage: {fileID: 8918904195635858936, guid: 9940f14b430ca074b8178734c94ec397, type: 3}
+--- !u!4 &223278548
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223278546}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &353059646
 GameObject:
   m_ObjectHideFlags: 0
@@ -1009,6 +1085,7 @@ MonoBehaviour:
   debugIsClimbing: 0
   debugRemainJumpCount: 0
   debugCurrentState: 0
+  debugCurrentLives: 0
 --- !u!212 &1486801859
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1541,7 +1618,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1854117843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3828,3 +3905,4 @@ SceneRoots:
   - {fileID: 1854117844}
   - {fileID: 1461687132}
   - {fileID: 1486801860}
+  - {fileID: 223278548}
