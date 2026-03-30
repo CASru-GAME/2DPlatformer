@@ -1527,6 +1527,8 @@ GameObject:
   - component: {fileID: 1854117844}
   - component: {fileID: 1854117843}
   - component: {fileID: 1854117845}
+  - component: {fileID: 1854117846}
+  - component: {fileID: 1854117848}
   m_Layer: 0
   m_Name: StagePre
   m_TagString: Untagged
@@ -1593,6 +1595,88 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageGenerator2
   prefabManager: {fileID: 1461687131}
+  SideUpStage: {fileID: 152312940673844924, guid: 1eb5b4270b6f8c74981bb3559490d483, type: 3}
+  UpSideStage: {fileID: 5493761192250881359, guid: a21ff9e6b0041314481682dc0575a47a, type: 3}
+  SideDownStage: {fileID: 4732498625839902999, guid: 7b6ecc040bc8c7442b032954f6f6b5cd, type: 3}
+  DownSideStage: {fileID: 8305096562292112771, guid: 585c8173cf84c8f4f912bd23f04ca7cd, type: 3}
+  StartStage: {fileID: 8010877135519720254, guid: 0b08649c8dcd29143949507c8b787370, type: 3}
+  GoalStage: {fileID: 8918904195635858936, guid: 9940f14b430ca074b8178734c94ec397, type: 3}
+--- !u!114 &1854117846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854117842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 745f696b7dd36584791795cf1642d819, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GimmickGenerator
+  gimmicks:
+  - {fileID: 5790123047733674694, guid: 843f6701fdde86b4a99996585e4997a6, type: 3}
+  - {fileID: 5790123047733674694, guid: 843f6701fdde86b4a99996585e4997a6, type: 3}
+  - {fileID: 5790123047733674694, guid: 843f6701fdde86b4a99996585e4997a6, type: 3}
+  - {fileID: 3116876009900185198, guid: 1249a722596165040b334740432f2781, type: 3}
+  - {fileID: 3116876009900185198, guid: 1249a722596165040b334740432f2781, type: 3}
+  spawnPoints:
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 2502755949885664672, guid: 316875871c366b240856a961b85e802b, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 1165161474697914682, guid: a0bddecce1a72124c95065806441f911, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 4600733405301579147, guid: f110167fc7a6eb941b10f4ac381b405b, type: 3}
+  - {fileID: 330510186241231327, guid: beaf8201c377d684ebc749aef0c95de1, type: 3}
+  - {fileID: 9072286548843086804, guid: 5b31e9e62d76b5b4a8cccd3a963855b1, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  - {fileID: 6328687907677437096, guid: 45c5db9291688ff46815999dceb3ac0c, type: 3}
+  grid: {fileID: 4327790101505521150, guid: 386d08d1331fbaf458ae0c021973ad49, type: 3}
+--- !u!114 &1854117848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854117842}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66e5937c7a892eb4f898fcfebb366b04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StageGenerator3
+  prefabManager: {fileID: 1461687131}
+  gimmicks:
+  - {fileID: 5790123047733674694, guid: 843f6701fdde86b4a99996585e4997a6, type: 3}
+  - {fileID: 5790123047733674694, guid: 843f6701fdde86b4a99996585e4997a6, type: 3}
+  - {fileID: 5790123047733674694, guid: 843f6701fdde86b4a99996585e4997a6, type: 3}
+  - {fileID: 3116876009900185198, guid: 1249a722596165040b334740432f2781, type: 3}
+  - {fileID: 3116876009900185198, guid: 1249a722596165040b334740432f2781, type: 3}
+  spawnPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   SideUpStage: {fileID: 152312940673844924, guid: 1eb5b4270b6f8c74981bb3559490d483, type: 3}
   UpSideStage: {fileID: 5493761192250881359, guid: a21ff9e6b0041314481682dc0575a47a, type: 3}
   SideDownStage: {fileID: 4732498625839902999, guid: 7b6ecc040bc8c7442b032954f6f6b5cd, type: 3}
