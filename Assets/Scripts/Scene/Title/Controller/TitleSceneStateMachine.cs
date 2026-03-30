@@ -68,7 +68,7 @@ namespace Scene.Controller
 
         public void LoadPerkSceneInvoke()
         {
-            Invoke(nameof(LoadPerkScene), 0.5f);
+            Invoke(nameof(LoadPerkScene), TransitionView.Instance.TransitionHalfDuration);
         }
 
         private void LoadPerkScene()

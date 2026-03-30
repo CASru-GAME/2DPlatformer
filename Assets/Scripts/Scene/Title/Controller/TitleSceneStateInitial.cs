@@ -1,3 +1,4 @@
+using Scene.View;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,6 +16,8 @@ namespace Scene.Controller
         public void OnEnter()
         {
             SceneManager.LoadScene(sM.SceneNameData.TransitionSceneName, LoadSceneMode.Additive);
+            if (TransitionView.Instance != null)
+                TransitionView.Instance.PlayAnim("Open_1");
             sM.ChangeState(new TitleSceneStateDefault(sM));
         }
 

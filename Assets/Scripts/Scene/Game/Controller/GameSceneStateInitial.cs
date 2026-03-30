@@ -19,8 +19,10 @@ namespace Scene.Controller
 
         public void HandleInput()
         {
-            if (sM.IsToNext)
-                sM.ChangeState(new GameSceneStateToGame(sM));
+            if (sM.IsToClear)
+                sM.ChangeState(new GameSceneStateClear(sM));
+            else if (sM.IsToOver)
+                sM.ChangeState(new GameSceneStateOver(sM));
         }
 
         public void OnExit()

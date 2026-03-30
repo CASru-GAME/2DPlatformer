@@ -1,28 +1,26 @@
-using Scene.View;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Scene.Controller
 {
-    public class GameSceneStateToTitle : ISceneState
+    public class GameSceneStateClear : ISceneState
     {
         private readonly GameSceneStateMachine sM;
         
-        public GameSceneStateToTitle(GameSceneStateMachine sM)
+        public GameSceneStateClear(GameSceneStateMachine sM)
         {
             this.sM = sM;
         }
 
         public void OnEnter()
         {
-            Time.timeScale = 1f;
-            TransitionView.Instance.PlayAnim("Close_1");
-            sM.LoadTitleSceneInvoke();
+            sM.GameView.OpenClear();
         }
 
         public void HandleInput()
         {
-
+            if (sM.IsToNext)
+                sM.ChangeState(new GameSceneStateToTitle(sM));
         }
 
         public void OnExit()

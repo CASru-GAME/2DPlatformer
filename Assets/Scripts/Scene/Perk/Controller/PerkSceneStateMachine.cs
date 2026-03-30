@@ -59,7 +59,7 @@ namespace Scene.Controller
 
         public void LoadGameSceneInvoke()
         {
-            Invoke(nameof(LoadGameScene), 0.5f);
+            Invoke(nameof(LoadGameScene), TransitionView.Instance.TransitionHalfDuration);
         }
 
         private void LoadGameScene()
