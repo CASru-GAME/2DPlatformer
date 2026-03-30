@@ -76,6 +76,14 @@ public class PlayerStatus
         }
     }
 
+    //強制ゲームオーバー（例: 落下死など）
+    public void ForceGameOver()
+    {
+        CurrentLives = 0;
+        OnLivesChanged?.Invoke(CurrentLives);
+        OnGameOver?.Invoke();
+    }
+
     // 残機を増やすメソッド
     public void AddLife()
     {
