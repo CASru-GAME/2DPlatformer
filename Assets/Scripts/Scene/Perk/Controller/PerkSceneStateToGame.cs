@@ -1,3 +1,4 @@
+using Scene.View;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,8 +15,8 @@ namespace Scene.Controller
 
         public void OnEnter()
         {
-            SceneManager.LoadScene(sM.SceneNameData.GameSceneName);
-            SceneManager.LoadScene("CurrentPerkList", LoadSceneMode.Additive);
+            TransitionView.Instance.PlayAnim("Close_1");
+            sM.LoadGameSceneInvoke();
         }
 
         public void HandleInput()

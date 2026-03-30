@@ -1,26 +1,26 @@
-using Scene.View;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Scene.Controller
 {
-    public class TitleSceneStateToPerk : ISceneState
+    public class TitleSceneStateInitial : ISceneState
     {
         private readonly TitleSceneStateMachine sM;
-        
-        public TitleSceneStateToPerk(TitleSceneStateMachine sM)
+
+        public TitleSceneStateInitial(TitleSceneStateMachine sM)
         {
             this.sM = sM;
         }
 
         public void OnEnter()
         {
-            TransitionView.Instance.PlayAnim("Close_1");
-            sM.LoadPerkSceneInvoke();
+            SceneManager.LoadScene(sM.SceneNameData.TransitionSceneName, LoadSceneMode.Additive);
+            sM.ChangeState(new TitleSceneStateDefault(sM));
         }
 
         public void HandleInput()
         {
-
+            
         }
 
         public void OnExit()

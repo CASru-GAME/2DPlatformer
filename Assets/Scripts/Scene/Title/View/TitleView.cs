@@ -15,7 +15,6 @@ namespace Scene.View
 
         public void OpenSetting()
         {
-            defaultCanvas.enabled = false;
             settingCanvas.enabled = true;
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using Scene.Data;
 using Scene.View;
@@ -20,7 +21,7 @@ namespace Scene.Controller
 
         private void Start()
         {
-            currentState = new TitleSceneStateDefault(this);
+            currentState = new TitleSceneStateInitial(this);
             currentState.OnEnter();
         }
 
@@ -63,6 +64,17 @@ namespace Scene.Controller
         public void ToExit()
         {
             IsToExit = true;
+        }
+
+        public void LoadPerkSceneInvoke()
+        {
+            Invoke(nameof(LoadPerkScene), 0.5f);
+        }
+
+        private void LoadPerkScene()
+        {
+            SceneManager.UnloadSceneAsync(sceneNameData.TitleSceneName);
+            SceneManager.LoadScene(sceneNameData.PerkSceneName, LoadSceneMode.Additive);
         }
     }
 }

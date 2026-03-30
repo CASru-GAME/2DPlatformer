@@ -15,3 +15,5 @@ MonoBehaviour:
   titleSceneName: DevTitle
   perkSceneName: DevPerk
   gameSceneName: TestrRun
+  currentPerkSceneName: CurrentPerkList
+  transitionSceneName: Transition

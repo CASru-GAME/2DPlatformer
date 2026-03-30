@@ -56,5 +56,18 @@ namespace Scene.Controller
         {
             Invoke(nameof(ToNext), delay);
         }
+
+        public void LoadGameSceneInvoke()
+        {
+            Invoke(nameof(LoadGameScene), 0.5f);
+        }
+
+        private void LoadGameScene()
+        {
+            SceneManager.UnloadSceneAsync(sceneNameData.PerkSceneName);
+            SceneManager.LoadScene(sceneNameData.GameSceneName, LoadSceneMode.Additive);
+            //後々変更
+            TransitionView.Instance.PlayAnim("Open_1");
+        }
     }
 }

@@ -11,5 +11,9 @@ namespace Scene.Data
         public string PerkSceneName => perkSceneName;
         [SerializeField] private string gameSceneName;
         public string GameSceneName => gameSceneName;
+        [SerializeField] private string currentPerkSceneName;
+        public string CurrentPerkSceneName => currentPerkSceneName;
+        [SerializeField] private string transitionSceneName;
+        public string TransitionSceneName => transitionSceneName;
     }
 }

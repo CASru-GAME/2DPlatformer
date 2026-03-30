@@ -57,10 +57,13 @@ namespace Scene.View
                 }
             }
 
-            for(int i = PerkEffectStorage.EnabledPerkList.Count; i < currentPerkIconViewList.Count; i++)
+            for(int i = currentPerkIconViewList.Count - 1; i >= PerkEffectStorage.EnabledPerkList.Count; i--)
             {
-                Destroy(currentPerkIconViewList[i].gameObject);
+                var iconToRemove = currentPerkIconViewList[i];
+                currentPerkIconViewList.RemoveAt(i);
+                Destroy(iconToRemove.gameObject);
             }
+
 
             if(currentPerkIconViewList.Count > 0)
                 lastIconPosition = currentPerkIconViewList[^1].RectTransform.anchoredPosition;

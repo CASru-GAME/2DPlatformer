@@ -1,4 +1,4 @@
-using UnityEngine;
+using Scene.View;
 using UnityEngine.SceneManagement;
 
 namespace Scene.Controller
@@ -16,6 +16,7 @@ namespace Scene.Controller
         {
             sM.PerkView.OpenInitial();
             SceneManager.LoadScene("CurrentPerkList", LoadSceneMode.Additive);
+            TransitionView.Instance.PlayAnim("Open_1");
         }
 
         public void HandleInput()
