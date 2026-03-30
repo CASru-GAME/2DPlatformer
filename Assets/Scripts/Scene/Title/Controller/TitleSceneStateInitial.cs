@@ -1,3 +1,4 @@
+using Perk.Model;
 using Scene.View;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,6 +16,7 @@ namespace Scene.Controller
 
         public void OnEnter()
         {
+            PerkEffectStorage.ResetAllPerks();
             SceneManager.LoadScene(sM.SceneNameData.TransitionSceneName, LoadSceneMode.Additive);
             if (TransitionView.Instance != null)
                 TransitionView.Instance.PlayAnim("Open_1");

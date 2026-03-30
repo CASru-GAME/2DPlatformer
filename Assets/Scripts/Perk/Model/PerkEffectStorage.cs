@@ -89,5 +89,11 @@ namespace Perk.Model
             int randomIndex = UnityEngine.Random.Range(0, perkIDList.Count);
             return perkIDList[randomIndex];
         }
+
+        public static void ResetAllPerks()
+        {
+            enabledPerkList.Clear();
+            usePerkList.Clear();
+        }
     }
 }
