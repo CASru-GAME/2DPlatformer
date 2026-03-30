@@ -8,7 +8,7 @@ namespace Perk.Data
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Initialize()
         {
-            PerkEffectStorage.RegisterPerk(19, () => new Warp());
+            //PerkEffectStorage.RegisterPerk(19, () => new Warp());
         }
 
         public override void Add()

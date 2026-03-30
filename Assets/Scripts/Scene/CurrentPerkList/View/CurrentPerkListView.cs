@@ -9,8 +9,7 @@ namespace Scene.View
     public class CurrentPerkListView : MonoBehaviour
     {
         [SerializeField] private Image perkIconPrefab;
-        private readonly List<Image> currentPerkIconList = new();
-        private readonly List<Text> currentPerkTextList = new();
+        private readonly List<PerkIconView> currentPerkIconViewList = new();
         [SerializeField] private PerkSelectViewDataTable perkSelectViewDataTable;
         [SerializeField] private Canvas canvas;
         private Vector2 lastIconPosition;
@@ -23,7 +22,7 @@ namespace Scene.View
         
         private void Start()
         {
-            lastIconPosition = new Vector2(-canvas.GetComponent<RectTransform>().rect.width / 2 - perkIconPrefab.rectTransform.sizeDelta.x / 2 + 10, canvas.GetComponent<RectTransform>().rect.height / 2 - perkIconPrefab.rectTransform.sizeDelta.y / 2 - 10);
+            lastIconPosition = new Vector2(canvas.GetComponent<RectTransform>().rect.width / 2 - perkIconPrefab.rectTransform.sizeDelta.x / 2 - 10, canvas.GetComponent<RectTransform>().rect.height / 2 + perkIconPrefab.rectTransform.sizeDelta.y / 2);
             lastUseImagePosition = new Vector2(-canvas.GetComponent<RectTransform>().rect.width / 2 - usePerkImagePrefab.rectTransform.sizeDelta.x / 2 + 60, -canvas.GetComponent<RectTransform>().rect.height / 2 + usePerkImagePrefab.rectTransform.sizeDelta.y / 2 - 40);
         }
 
@@ -37,37 +36,37 @@ namespace Scene.View
         {
             for(int i = 0; i < PerkEffectStorage.EnabledPerkList.Count; i++)
             {
-                if (i < currentPerkIconList.Count)
+                if (i < currentPerkIconViewList.Count)
                 {
                     int id = PerkEffectStorage.EnabledPerkList[i].id;
-                    currentPerkIconList[i].sprite = perkSelectViewDataTable.GetPerkSprite(id);
-                    currentPerkTextList[i].text = "x" + PerkEffectStorage.EnabledPerkList[i].perkEffect.Stack.ToString();
+                    currentPerkIconViewList[i].UpdateIcon(id, PerkEffectStorage.EnabledPerkList[i].perkEffect.Stack);
                 }
                 else
                 {
                     Image newIcon = Instantiate(perkIconPrefab);
-                    newIcon.sprite = perkSelectViewDataTable.GetPerkSprite(PerkEffectStorage.EnabledPerkList[i].id);
                     newIcon.rectTransform.SetParent(canvas.transform, false);
-                    newIcon.rectTransform.anchoredPosition = lastIconPosition + new Vector2(newIcon.rectTransform.sizeDelta.x + 5, 0);
-                    if(newIcon.rectTransform.anchoredPosition.x > canvas.GetComponent<RectTransform>().rect.width / 2)
+                    newIcon.rectTransform.anchoredPosition = lastIconPosition + new Vector2(0, -newIcon.rectTransform.sizeDelta.y - 5);
+                    if(newIcon.rectTransform.anchoredPosition.y < -canvas.GetComponent<RectTransform>().rect.height / 2)
                     {
-                        newIcon.rectTransform.anchoredPosition = new Vector2(-canvas.GetComponent<RectTransform>().rect.width / 2 + newIcon.rectTransform.sizeDelta.x / 2 + 15, lastIconPosition.y - newIcon.rectTransform.sizeDelta.y - 5);
+                        newIcon.rectTransform.anchoredPosition = new Vector2(lastIconPosition.x - newIcon.rectTransform.sizeDelta.x - 5, canvas.GetComponent<RectTransform>().rect.height / 2 - newIcon.rectTransform.sizeDelta.y / 2 - 5);
                     }
                     
-                    
-                    currentPerkIconList.Add(newIcon);
-                    currentPerkTextList.Add(newIcon.GetComponentInChildren<Text>());
+                    var newIconView = newIcon.GetComponent<PerkIconView>();
+                    currentPerkIconViewList.Add(newIconView);
                     lastIconPosition = newIcon.rectTransform.anchoredPosition;
                 }
             }
 
-            for(int i = PerkEffectStorage.EnabledPerkList.Count; i < currentPerkIconList.Count; i++)
+            for(int i = currentPerkIconViewList.Count - 1; i >= PerkEffectStorage.EnabledPerkList.Count; i--)
             {
-                Destroy(currentPerkIconList[i].gameObject);
+                var iconToRemove = currentPerkIconViewList[i];
+                currentPerkIconViewList.RemoveAt(i);
+                Destroy(iconToRemove.gameObject);
             }
 
-            if(currentPerkIconList.Count > 0)
-                lastIconPosition = currentPerkIconList[^1].rectTransform.anchoredPosition;
+
+            if(currentPerkIconViewList.Count > 0)
+                lastIconPosition = currentPerkIconViewList[^1].RectTransform.anchoredPosition;
         }
 
         private void UpdateUsePerkIcon()

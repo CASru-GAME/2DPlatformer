@@ -12,7 +12,7 @@ namespace Perk.Data
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Initialize()
         {
-            PerkEffectStorage.RegisterPerk(16, () => new StayAddCount());
+            //PerkEffectStorage.RegisterPerk(16, () => new StayAddCount());
         }
 
         public override void Add()

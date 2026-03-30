@@ -26,6 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Dev/TestrRun.unity
     guid: 98bbcc0d77f1fc54d92bad598df55403
+  - enabled: 1
+    path: Assets/Scenes/Dev/Transition.unity
+    guid: 1e30ad5d8193499468a8c2d536eecac6
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

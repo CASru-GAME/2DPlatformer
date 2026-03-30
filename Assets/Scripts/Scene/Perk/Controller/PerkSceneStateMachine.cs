@@ -51,5 +51,23 @@ namespace Scene.Controller
         {
             selectPerkSystem.SetRandomIDs(currentPerkCount);
         }
+
+        public void ToNextDelay(float delay)
+        {
+            Invoke(nameof(ToNext), delay);
+        }
+
+        public void LoadGameSceneInvoke()
+        {
+            Invoke(nameof(LoadGameScene), TransitionView.Instance.TransitionHalfDuration);
+        }
+
+        private void LoadGameScene()
+        {
+            SceneManager.UnloadSceneAsync(sceneNameData.PerkSceneName);
+            SceneManager.LoadScene(sceneNameData.GameSceneName, LoadSceneMode.Additive);
+            //後々変更
+            TransitionView.Instance.PlayAnim("Open_1");
+        }
     }
 }

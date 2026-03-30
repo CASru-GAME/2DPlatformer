@@ -9,7 +9,7 @@ namespace Perk.Data
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Initialize()
         {
-            PerkEffectStorage.RegisterPerk(21, () => new RandomPerk());
+            //PerkEffectStorage.RegisterPerk(21, () => new RandomPerk());
         }
 
         public override void Add()

@@ -1,4 +1,4 @@
-using UnityEngine;
+using Scene.View;
 using UnityEngine.SceneManagement;
 
 namespace Scene.Controller
@@ -14,7 +14,8 @@ namespace Scene.Controller
 
         public void OnEnter()
         {
-            SceneManager.LoadScene(sM.SceneNameData.PerkSceneName);
+            TransitionView.Instance.PlayAnim("Close_1");
+            sM.LoadPerkSceneInvoke();
         }
 
         public void HandleInput()
