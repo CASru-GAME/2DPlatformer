@@ -12,6 +12,7 @@ public class StageGenerator3 : MonoBehaviour
     public GameObject DownSideStage;
     public GameObject StartStage;
     public GameObject GoalStage;
+    public GameObject FallDetect;
 
     void Start()
     {
@@ -36,12 +37,6 @@ public class StageGenerator3 : MonoBehaviour
 
             GameObject gimmickPrefab = gimmicks[gimmick - 1];
             Transform gimPos = spawnPoints[stage - 1];
-            //Transform parent = spawnPoints[stage - 1];
-
-            //foreach (Transform child in parent)
-            //{
-            //    Instantiate(gimmickPrefab, child.position, Quaternion.identity);
-            //}
 
             if (previousDirection == 1)
             {
@@ -53,6 +48,7 @@ public class StageGenerator3 : MonoBehaviour
                 if (direction == 2) //横から上
                 {
                     Instantiate (SideUpStage, new Vector3(position.x + 10, position.y, position.z), Quaternion.identity);
+                    Instantiate(FallDetect, new Vector3(position.x + 10, position.y - 7, position.z), Quaternion.identity);
                     position = new Vector3(position.x + 10, position.y + 10, position.z);
                 }
 
@@ -90,6 +86,11 @@ public class StageGenerator3 : MonoBehaviour
                     {
                         position = new Vector3(position.x, position.y - 10, position.z);
                     }
+            }
+            
+            if(direction == 1) //落下死検知オブジェクト設置
+            {
+                Instantiate(FallDetect, new Vector3(position.x, position.y - 7, position.z), Quaternion.identity);
             }
 
             Instantiate(prefab, position, Quaternion.identity);
