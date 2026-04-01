@@ -66,8 +66,6 @@ namespace Scene.Controller
         {
             SceneManager.UnloadSceneAsync(sceneNameData.PerkSceneName);
             SceneManager.LoadScene(sceneNameData.GameSceneName, LoadSceneMode.Additive);
-            //後々変更
-            TransitionView.Instance.PlayAnim("Open_1");
         }
     }
 }

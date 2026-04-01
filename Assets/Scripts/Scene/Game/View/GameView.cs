@@ -17,8 +17,8 @@ namespace Scene.View
         private readonly List<Image> lifeImageList = new();
         private Vector2 initialLifeImagePosition;
         [SerializeField] private Image initialLifeImage;
-        [SerializeField] private PlayerController playerController;
         public static Action<int, int> OnDamaged;
+        public static Action<int, int> OnInitialized;
         
         private void Awake()
         {
@@ -29,17 +29,20 @@ namespace Scene.View
             initialLifeImagePosition = initialLifeImage.rectTransform.anchoredPosition;
             Destroy(initialLifeImage.gameObject);
             OnDamaged += SetLifeImage;
+            OnInitialized += SetLifeImage;
         }
 
         public void OpenClear()
         {
             OnDamaged -= SetLifeImage;
+            OnInitialized -= SetLifeImage;
             StartCoroutine(OpenCanvasCoroutine(clearBackCanvas, clearCanvas));
         }
 
         public void OpenOver()
         {
             OnDamaged -= SetLifeImage;
+            OnInitialized -= SetLifeImage;
             StartCoroutine(OpenCanvasCoroutine(overBackCanvas, overCanvas));
         }
 

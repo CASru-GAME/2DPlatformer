@@ -29,7 +29,7 @@ namespace Perk.Data
         private void OnLand()
         {
             for(int i = 0; i < Stack; i++)
-                PerkEffectStorage.RemovePerkAtRandom();
+                PerkEffectStorage.RemovePerkAtRandom(22);
         }
     }
 }

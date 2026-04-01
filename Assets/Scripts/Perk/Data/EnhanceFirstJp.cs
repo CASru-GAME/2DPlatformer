@@ -25,6 +25,7 @@ namespace Perk.Data
         public override void Remove()
         {
             Stack--;
+            if(isCharging) PerkEffectReference.Instance.JumpPowerMultiplierBase -= 0.2f;
             if(Stack != 0) return;
             PerkEvents.Land -= OnLand;
             PerkEvents.Jump -= OnJump;
@@ -35,7 +36,7 @@ namespace Perk.Data
             Debug.Log("Land:" + isCharging);
             if(isCharging) return;
             isCharging = true;
-            PerkEffectReference.Instance.JumpPowerMultiplier += Stack * 0.5f;
+            PerkEffectReference.Instance.JumpPowerMultiplierBase += Stack * 0.2f;
         }
 
         private void OnJump()
@@ -43,7 +44,7 @@ namespace Perk.Data
             Debug.Log("Jump:" + isCharging);
             if(!isCharging) return;
             isCharging = false;
-            PerkEffectReference.Instance.JumpPowerMultiplier -= Stack * 0.5f;
+            PerkEffectReference.Instance.JumpPowerMultiplierBase -= Stack * 0.2f;
         }
     }
 }

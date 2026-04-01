@@ -14,13 +14,13 @@ namespace Perk.Data
         public override void Add()
         {
             Stack++;
-            PerkEffectReference.Instance.JumpPowerMultiplier += 0.5f;
+            PerkEffectReference.Instance.JumpPowerMultiplierBase += 0.2f;
         }
 
         public override void Remove()
         {
             Stack--;
-            PerkEffectReference.Instance.JumpPowerMultiplier -= 0.5f;
+            PerkEffectReference.Instance.JumpPowerMultiplierBase -= 0.2f;
         }
     }
 }

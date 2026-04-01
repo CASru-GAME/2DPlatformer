@@ -24,7 +24,7 @@ namespace Perk.Data
 
         public override void Remove()
         {
-            if (isCharging) PerkEffectReference.Instance.JumpPowerMultiplier -= 1f; 
+            if (isCharging) PerkEffectReference.Instance.JumpPowerMultiplierBase -= 0.2f; 
             Stack--;
             if(Stack != 0) return;
             PerkEvents.Damaged -= OnDamaged;
@@ -33,13 +33,13 @@ namespace Perk.Data
 
         private void OnDamaged()
         {
-            PerkEffectReference.Instance.JumpPowerMultiplier += Stack; 
+            PerkEffectReference.Instance.JumpPowerMultiplierBase += Stack * 0.2f; 
             isCharging = true;
         }
 
         private void OnJump()
         {
-            if(isCharging) PerkEffectReference.Instance.JumpPowerMultiplier -= Stack; 
+            if(isCharging) PerkEffectReference.Instance.JumpPowerMultiplierBase -= Stack * 0.2f; 
             isCharging = false;
         }
     }

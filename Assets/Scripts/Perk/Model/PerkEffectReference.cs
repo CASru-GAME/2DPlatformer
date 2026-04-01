@@ -19,7 +19,9 @@ namespace Perk.Model
         //強制的にジャンプさせるかどうか
         public bool IsForcedJump => ForcedJumpStack > 0;
         //ジャンプ力の倍率
-        public float JumpPowerMultiplier = 1f;
+        public float JumpPowerMultiplier => JumpPowerMultiplierRandom > 0 ? JumpPowerMultiplierRandom : JumpPowerMultiplierBase;
+        public float JumpPowerMultiplierBase = 1f;
+        public float JumpPowerMultiplierRandom = -1f;
         public float InvincibleSeconds = 0;
         //現在無敵かどうか
         public bool IsInvincible => InvincibleSeconds > 0;

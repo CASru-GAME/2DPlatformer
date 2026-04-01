@@ -64,17 +64,24 @@ namespace Perk.Model
             usePerkList.Add((id, enabledPerkList.Find(perk => perk.id == id).perkEffect));
         }
 
-        public static void RemovePerkAtRandom()
+        public static void RemovePerkAtRandom(int exceptionID)
         {
-            if (enabledPerkList.Count == 0)
+            if (enabledPerkList.Count <= 1)
             {
                 Debug.LogWarning("No perks to remove.");
                 return;
             }
 
-            int randomIndex = UnityEngine.Random.Range(0, enabledPerkList.Count);
+            List<int> removableIDList = new();
             for(int i = 0; i < enabledPerkList.Count; i++)
-                if(enabledPerkList[i].id == enabledPerkList[randomIndex].id)
+                if(enabledPerkList[i].id != exceptionID)
+                    removableIDList.Add(enabledPerkList[i].id);
+
+            int randomIndex = UnityEngine.Random.Range(0, removableIDList.Count);
+            int removedID = removableIDList[randomIndex];
+
+            for(int i = 0; i < enabledPerkList.Count; i++)
+                if(enabledPerkList[i].id == removedID)
                 {
                     enabledPerkList[i].perkEffect.Remove();
                     if(enabledPerkList[i].perkEffect.Stack == 0)
