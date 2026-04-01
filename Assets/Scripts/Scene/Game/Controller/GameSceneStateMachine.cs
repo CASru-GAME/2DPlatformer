@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using Scene.Data;
 using Scene.View;
@@ -16,11 +17,15 @@ namespace Scene.Controller
         public SceneNameData SceneNameData => sceneNameData;
         [SerializeField] private GameView gameView;
         public GameView GameView => gameView;
+        public static Action OnClear;
+        public static Action OnOver;
 
         private void Start()
         {
             currentState = new GameSceneStateInitial(this);
             currentState.OnEnter();
+            OnClear += ToClear;
+            OnOver += ToOver;
         }
 
         private void Update()
@@ -48,22 +53,16 @@ namespace Scene.Controller
             IsToNext = true;
         }
 
-        //以下が必要：
-        //using Scene.Controller;
-        //[SerializeField] private GameSceneStateMachine gameSceneStateMachine;
-
-        //ゲームクリア時：gameSceneStateMachine.ToClear();
-        //ゲームオーバー時：gameSceneStateMachine.ToOver();
-        //を呼び出す
-
         public void ToClear()
         {
             IsToClear = true;
+            OnClear -= ToClear;
         }
 
         public void ToOver()
         {
             IsToOver = true;
+            OnOver -= ToOver;
         }
 
         public void LoadTitleSceneInvoke()

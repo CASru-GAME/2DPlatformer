@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace Scene.View
         private Vector2 initialLifeImagePosition;
         [SerializeField] private Image initialLifeImage;
         [SerializeField] private PlayerController playerController;
+        public static Action<int, int> OnDamaged;
         
         private void Awake()
         {
@@ -26,20 +28,18 @@ namespace Scene.View
             overCanvas.enabled = false;
             initialLifeImagePosition = initialLifeImage.rectTransform.anchoredPosition;
             Destroy(initialLifeImage.gameObject);
-        }
-
-        private void Update()
-        {
-            SetLifeImage();
+            OnDamaged += SetLifeImage;
         }
 
         public void OpenClear()
         {
+            OnDamaged -= SetLifeImage;
             StartCoroutine(OpenCanvasCoroutine(clearBackCanvas, clearCanvas));
         }
 
         public void OpenOver()
         {
+            OnDamaged -= SetLifeImage;
             StartCoroutine(OpenCanvasCoroutine(overBackCanvas, overCanvas));
         }
 
@@ -59,12 +59,8 @@ namespace Scene.View
             front.enabled = true;
         }
 
-        private void SetLifeImage()    
+        private void SetLifeImage(int maxLife, int currentLife)    
         {
-            //int maxLife = playerController.PlayerStatus.MaxLives;
-            //int currentLife = playerController.PlayerStatus.CurrentLives;
-            int maxLife = 5;
-            int currentLife = 3;
             if (lifeImageList.Count < maxLife)
             {
                 for (int i = lifeImageList.Count; i < maxLife; i++)
