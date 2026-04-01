@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +12,13 @@ namespace Scene.View
         [SerializeField] private Canvas clearCanvas;
         [SerializeField] private Canvas overBackCanvas;
         [SerializeField] private Canvas overCanvas;
+        [SerializeField] private Image lifeImagePrefab;
+        [SerializeField] private Canvas lifeCanvas;
+        private readonly List<Image> lifeImageList = new();
+        private Vector2 initialLifeImagePosition;
+        [SerializeField] private Image initialLifeImage;
+        [SerializeField] private PlayerController playerController;
+        public static Action<int, int> OnDamaged;
         
         private void Awake()
         {
@@ -17,15 +26,20 @@ namespace Scene.View
             clearCanvas.enabled = false;
             overBackCanvas.enabled = false;
             overCanvas.enabled = false;
+            initialLifeImagePosition = initialLifeImage.rectTransform.anchoredPosition;
+            Destroy(initialLifeImage.gameObject);
+            OnDamaged += SetLifeImage;
         }
 
         public void OpenClear()
         {
+            OnDamaged -= SetLifeImage;
             StartCoroutine(OpenCanvasCoroutine(clearBackCanvas, clearCanvas));
         }
 
         public void OpenOver()
         {
+            OnDamaged -= SetLifeImage;
             StartCoroutine(OpenCanvasCoroutine(overBackCanvas, overCanvas));
         }
 
@@ -43,6 +57,36 @@ namespace Scene.View
 
             yield return new WaitForSecondsRealtime(0.3f);
             front.enabled = true;
+        }
+
+        private void SetLifeImage(int maxLife, int currentLife)    
+        {
+            if (lifeImageList.Count < maxLife)
+            {
+                for (int i = lifeImageList.Count; i < maxLife; i++)
+                {
+                    Image newImage = Instantiate(lifeImagePrefab);
+                    newImage.transform.SetParent(lifeCanvas.transform, false);
+                    newImage.rectTransform.anchoredPosition = initialLifeImagePosition + new Vector2(i * (newImage.rectTransform.rect.width + 5), 0);
+                    lifeImageList.Add(newImage);
+                }
+            }
+            else if (lifeImageList.Count > maxLife)
+            {
+                for (int i = lifeImageList.Count - 1; i >= maxLife; i--)
+                {
+                    Destroy(lifeImageList[i].gameObject);
+                    lifeImageList.RemoveAt(i);
+                }
+            }
+
+            for (int i = 0; i < lifeImageList.Count; i++)
+            {
+                if (i < currentLife)
+                    lifeImageList[i].color = Color.white;
+                else
+                    lifeImageList[i].color = new Color(1, 1, 1, 0.3f);
+            }
         }
     }
 }
