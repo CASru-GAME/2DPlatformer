@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fbb70b8b4e99896499bbeae2a51dd665, type: 3}
-  m_Name: 5
+  m_Name: 7
   m_EditorClassIdentifier: Assembly-CSharp::Scene.Data.GimmickViewData
-  id: 5
-  description: "\u843D\u4E0B\u3059\u308B\u5E8A\u3092\u8A2D\u7F6E\u3059\u308B"
+  id: 6
+  description: "\u89E6\u308C\u305F\u3089\u3069\u3063\u304B\u3078\u884C\u304F\u9818\u57DF\u3092\u8A2D\u7F6E\u3059\u308B"

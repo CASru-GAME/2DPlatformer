@@ -23,12 +23,13 @@ namespace Perk.Data
             Stack--;
             if(Stack != 0) return;
             PerkEvents.Jump -= OnJump;
+            PerkEffectReference.Instance.JumpPowerMultiplierRandom = -1f;
         }
 
         private void OnJump()
         {
-            float rand = Random.Range(1, Stack * 3);
-            PerkEffectReference.Instance.JumpPowerMultiplier = rand;
+            float rand = Random.Range(0.5f, 1.5f);
+            PerkEffectReference.Instance.JumpPowerMultiplierRandom = rand;
         }
     }
 }

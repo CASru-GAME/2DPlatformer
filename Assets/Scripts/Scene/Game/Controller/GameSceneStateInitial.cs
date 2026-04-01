@@ -1,3 +1,4 @@
+using Scene.View;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,7 +15,7 @@ namespace Scene.Controller
 
         public void OnEnter()
         {
-
+            TransitionView.Instance.PlayAnim("Open_1");
         }
 
         public void HandleInput()

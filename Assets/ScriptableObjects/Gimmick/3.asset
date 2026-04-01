@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: 3
   m_EditorClassIdentifier: Assembly-CSharp::Scene.Data.GimmickViewData
   id: 3
-  description: "\u30AE\u30DF\u30C3\u30AF\u306E\u8AAC\u660E"
+  description: "\u56DE\u8EE2\u3059\u308B\u5E8A\u3092\u8A2D\u7F6E\u3059\u308B"
