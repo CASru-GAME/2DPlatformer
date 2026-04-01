@@ -1,6 +1,8 @@
 using UnityEngine;
 using Perk.Model;   //パークの参照
 using Perk.Data;    //パークのイベント
+using Scene.View;   //シーンのイベント(ダメージ通知)
+using Scene.Controller; //シーンのコントローラー（ゲームオーバーの処理など）へのアクセス
 
 public class PlayerController : MonoBehaviour
 {
@@ -116,6 +118,8 @@ public class PlayerController : MonoBehaviour
         {
             status.InitializeStatus();
         }
+
+        GameView.OnInitialized?.Invoke(initialLives, initialLives); // プレイヤーの初期化が完了したことを通知
     }
 
     // Update is called once per frame
@@ -479,8 +483,6 @@ public class PlayerController : MonoBehaviour
         {
             Miss();
         }
-
-
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -500,6 +502,21 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        //ゴール判定 (ゲームクリア)
+        if (collision.gameObject.CompareTag("Goal"))
+        {
+        Debug.Log("ゴールに到達！");
+        GameSceneStateMachine.OnClear?.Invoke();
+        }
+
+        //落下死判定 (ゲームオーバー)
+        if (collision.gameObject.CompareTag("DeathZone"))
+        {
+            Debug.Log("落下死！");
+            // 残機に関わらず即ゲームオーバーにする場合
+            GameSceneStateMachine.OnOver?.Invoke();
+        }
+        
         if (collision.gameObject.CompareTag("Ladder"))
         {
             canLadderClimb = false; // はしごから離れたら登れなくする
@@ -516,8 +533,10 @@ public class PlayerController : MonoBehaviour
             Debug.Log("ダメージを受けない（無敵状態）");
             return;
         }
+
+        GameView.OnDamaged?.Invoke(initialLives, status.CurrentLives); // ダメージを受けたイベントを通知
         
-        PerkEvents.Damaged?.Invoke(); // ダメージを受けたイベントを通知
+        PerkEvents.Damaged?.Invoke(); // ダメージを受けたイベントをパークに通知
         
         //強制ジャンプのパークがある場合
         if (perk.IsForcedJump)
@@ -563,7 +582,9 @@ public class PlayerController : MonoBehaviour
 
     private void HandleGameOver()
     {
-        Debug.Log("ゲームオーバー！タイトル画面へ戻るなどの処理");
+        Debug.Log("ゲームオーバー");
+        // ゲームオーバーの処理を呼び出す（例: シーン遷移、UI表示など）
+        GameSceneStateMachine.OnOver?.Invoke();
     }
 
     private System.Collections.IEnumerator FlashEffect()
