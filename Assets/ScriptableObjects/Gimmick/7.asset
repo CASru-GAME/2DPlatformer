@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbb70b8b4e99896499bbeae2a51dd665, type: 3}
   m_Name: 7
   m_EditorClassIdentifier: Assembly-CSharp::Scene.Data.GimmickViewData
-  id: 6
-  description: "\u89E6\u308C\u305F\u3089\u3069\u3063\u304B\u3078\u884C\u304F\u9818\u57DF\u3092\u8A2D\u7F6E\u3059\u308B"
+  id: 7
+  description: "\u89E6\u308C\u305F\u3089\u30C0\u30E1\u30FC\u30B8\u3092\u53D7\u3051\u308B\u30C8\u30B2\u3092\u8A2D\u7F6E\u3059\u308B"

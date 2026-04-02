@@ -1,14 +1,18 @@
 using UnityEngine;
 using Perk.Model;   //パークの参照
-using Perk.Data;    //パークのイベント
-using Scene.View;   //シーンのイベント(ダメージ通知)
-using Scene.Controller; //シーンのコントローラー（ゲームオーバーの処理など）へのアクセス
+using Perk.Data;
+using Player.View;
+using System;
+using Scene.View;
+using Scene.Controller;    //パークのイベント
 
 public class PlayerController : MonoBehaviour
 {
     private PlayerMove psm;
 
-    private Animator anim; //アニメーターコンポーネントを入れる変数
+    //直前の状態
+    private PlayerState lastState;
+    [SerializeField] private PlayerView playerView;
 
     //プレイヤーの移動速度
     [Header("移動設定")]
@@ -31,8 +35,9 @@ public class PlayerController : MonoBehaviour
 
     private bool lastGrounded; // 前フレームの接地状態を保存する変数
     
-    //現在点滅中か（初期は点滅していない）
-    private bool isFlashing = false;
+    //現在無敵か（初期は無敵ではない）
+    private bool isInvincible = false;
+    private bool isInvincibleLast = false;
     
     // プレイヤーの残機などのステータスを管理するクラス
     private PlayerStatus status; 
@@ -79,13 +84,6 @@ public class PlayerController : MonoBehaviour
         psm = new PlayerMove();
         // 物理移動コンポーネントの取得
         rb = GetComponent<Rigidbody2D>();
-        
-        // アニメーターコンポーネントの取得
-        anim = GetComponent<Animator>();
-        if (anim == null)
-        {
-            Debug.LogWarning("アニメーターが付いていないのでアニメーションは再生されません");
-        }
 
         //spriteRendererの取得（インスペクターで設定していない場合は同じオブジェクトから探す）
         if (spriteRenderer == null)
@@ -112,6 +110,7 @@ public class PlayerController : MonoBehaviour
     {
         // 初期位置をrespawnPositionに設定
         respawnPosition = transform.position;
+        playerView.PlayAnimation("Idle");    
 
         // パークの初期化
         if (status != null)
@@ -119,7 +118,7 @@ public class PlayerController : MonoBehaviour
             status.InitializeStatus();
         }
 
-        GameView.OnInitialized?.Invoke(initialLives, initialLives); // プレイヤーの初期化が完了したことを通知
+        GameView.OnInitialized?.Invoke(status.MaxLives, status.CurrentLives); // ゲーム全体の初期化が完了したことを通知
     }
 
     // Update is called once per frame
@@ -188,10 +187,10 @@ public class PlayerController : MonoBehaviour
             shieldObject.SetActive(perk.HasShield);
         }
 
-        //無敵時間になったら点滅開始
-        if(perk.IsInvincible && !isFlashing)
+        //無敵時間になったら無敵効果開始
+        if(perk.IsInvincible && !isInvincible)
         {
-            StartCoroutine(FlashEffect());
+            StartCoroutine(InvincibleCount());
         }
         
         //無敵時間のカウントダウン
@@ -203,13 +202,6 @@ public class PlayerController : MonoBehaviour
             if (perk.InvincibleSeconds < 0)
             {
                 perk.InvincibleSeconds = 0;
-
-                //念のため点滅を止める（無敵時間が0になったときに点滅も止まるように）
-                if (spriteRenderer != null)
-                {
-                    // 点滅を止めて元の色に戻す
-                    spriteRenderer.color = new Color(1f, 1f, 1f, 1f);
-                }
             }
         }
         
@@ -277,12 +269,101 @@ public class PlayerController : MonoBehaviour
     //アニメーションの更新を行うメソッド
     private void UpdateAnimation()
     {
-        if (anim == null)
+        if (psm == null) return;
+        if(lastState == psm.CurrentState)
         {
-            return; // アニメーターがない場合は何もしない
+            if(!isInvincible && isInvincibleLast)
+            {
+                switch (psm.CurrentState)
+                {
+                    case PlayerState.Idle:
+                        playerView.PlayAnimation("Idle");
+                        break;
+                    case PlayerState.Walk:
+                        playerView.PlayAnimation("Walk");
+                        break;
+                    case PlayerState.Jump:
+                        playerView.PlayAnimation("Jump");
+                        break;
+                    case PlayerState.Climb:
+                        playerView.PlayAnimation("Jump");
+                        break;
+                    case PlayerState.Glide:
+                        playerView.PlayAnimation("Jump");
+                        break;
+                    case PlayerState.Ladder:
+                        playerView.PlayAnimation("Idle");
+                        break;
+                }
+            }
+            else if(isInvincible && !isInvincibleLast)
+            {
+                switch (psm.CurrentState)
+                {
+                    case PlayerState.Idle:
+                        playerView.PlayAnimation("IdleInv");
+                        break;
+                    case PlayerState.Walk:
+                        playerView.PlayAnimation("WalkInv");
+                        break;
+                    case PlayerState.Jump:
+                        playerView.PlayAnimation("JumpInv");
+                        break;
+                    case PlayerState.Climb:
+                        playerView.PlayAnimation("JumpInv");
+                        break;
+                    case PlayerState.Glide:
+                        playerView.PlayAnimation("JumpInv");
+                        break;
+                    case PlayerState.Ladder:
+                        playerView.PlayAnimation("IdleInv");
+                        break;
+                }
+            }
+            isInvincibleLast = isInvincible;
+            return;
         }
-        
-        anim.SetInteger("State", (int)psm.CurrentState);
+        lastState = psm.CurrentState;
+        switch (psm.CurrentState)
+        {
+            case PlayerState.Idle:
+                if (isInvincible)
+                    playerView.PlayAnimation("IdleInv");
+                else
+                    playerView.PlayAnimation("Idle");
+                break;
+            case PlayerState.Walk:
+                if (isInvincible)
+                    playerView.PlayAnimation("WalkInv");
+                else
+                    playerView.PlayAnimation("Walk");
+                break;
+            case PlayerState.Jump:
+                if (isInvincible)
+                    playerView.PlayAnimation("JumpInv");
+                else
+                    playerView.PlayAnimation("Jump");
+                break;
+            case PlayerState.Climb:
+                if (isInvincible)
+                    playerView.PlayAnimation("JumpInv");
+                else
+                    playerView.PlayAnimation("Jump");
+                break;
+            case PlayerState.Glide:
+                if (isInvincible)
+                    playerView.PlayAnimation("JumpInv");
+                else
+                    playerView.PlayAnimation("Jump");
+                break;
+            case PlayerState.Ladder:
+                if (isInvincible)
+                    playerView.PlayAnimation("IdleInv");
+                else
+                    playerView.PlayAnimation("Idle");
+                break;
+        }
+        isInvincibleLast = isInvincible;
     }
 
     //ジャンプの判断
@@ -483,6 +564,8 @@ public class PlayerController : MonoBehaviour
         {
             Miss();
         }
+
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -502,21 +585,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        //ゴール判定 (ゲームクリア)
-        if (collision.gameObject.CompareTag("Goal"))
-        {
-        Debug.Log("ゴールに到達！");
-        GameSceneStateMachine.OnClear?.Invoke();
-        }
-
-        //落下死判定 (ゲームオーバー)
-        if (collision.gameObject.CompareTag("DeathZone"))
-        {
-            Debug.Log("落下死！");
-            // 残機に関わらず即ゲームオーバーにする場合
-            GameSceneStateMachine.OnOver?.Invoke();
-        }
-        
         if (collision.gameObject.CompareTag("Ladder"))
         {
             canLadderClimb = false; // はしごから離れたら登れなくする
@@ -533,10 +601,8 @@ public class PlayerController : MonoBehaviour
             Debug.Log("ダメージを受けない（無敵状態）");
             return;
         }
-
-        GameView.OnDamaged?.Invoke(initialLives, status.CurrentLives); // ダメージを受けたイベントを通知
         
-        PerkEvents.Damaged?.Invoke(); // ダメージを受けたイベントをパークに通知
+        PerkEvents.Damaged?.Invoke(); // ダメージを受けたイベントを通知
         
         //強制ジャンプのパークがある場合
         if (perk.IsForcedJump)
@@ -561,6 +627,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("ダメージを受ける");
             status.DecreaseLife();
+            GameView.OnDamaged?.Invoke(status.MaxLives, status.CurrentLives); // ダメージを受けたことを通知
 
             perk.InvincibleSeconds = 2f;
 
@@ -582,37 +649,26 @@ public class PlayerController : MonoBehaviour
 
     private void HandleGameOver()
     {
-        Debug.Log("ゲームオーバー");
-        // ゲームオーバーの処理を呼び出す（例: シーン遷移、UI表示など）
-        GameSceneStateMachine.OnOver?.Invoke();
+        Debug.Log("ゲームオーバー！タイトル画面へ戻るなどの処理");
+        GameSceneStateMachine.OnOver?.Invoke(); // ゲームオーバーイベントを通知
     }
 
-    private System.Collections.IEnumerator FlashEffect()
+    private System.Collections.IEnumerator InvincibleCount()
     {
         if (spriteRenderer == null)
         {
             yield break; // SpriteRendererがない場合はコルーチンを終了
         }
         
-        isFlashing = true;
+        isInvincible = true;
         var perk = PerkEffectReference.Instance;
-
-        //元の色（RBG)と透明度（A）を保存しておく
-        Color originalColor = spriteRenderer.color;
 
         // 無敵時間が続く限り点滅を続ける
         while (perk.InvincibleSeconds > 0)
         {
-            // 半透明にする
-            Color dimmedColor = new (originalColor.r, originalColor.g, originalColor.b, 0.5f);
-            spriteRenderer.color = dimmedColor;
-            yield return new WaitForSeconds(0.1f); // 点滅の速さ
-            // 元の色に戻す
-            spriteRenderer.color = originalColor; // 元の色に戻す
-            yield return new WaitForSeconds(0.1f); // 点滅の速さ
-
+            yield return null;
         }
-        spriteRenderer.color = originalColor; // 念のため元の色に戻す
-        isFlashing = false;
+
+        isInvincible = false;
     }
 }
