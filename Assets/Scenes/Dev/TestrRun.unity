@@ -449,6 +449,7 @@ MonoBehaviour:
   DownSideStage: {fileID: 8305096562292112771, guid: 585c8173cf84c8f4f912bd23f04ca7cd, type: 3}
   StartStage: {fileID: 8010877135519720254, guid: 0b08649c8dcd29143949507c8b787370, type: 3}
   GoalStage: {fileID: 8918904195635858936, guid: 9940f14b430ca074b8178734c94ec397, type: 3}
+  FallDetect: {fileID: 8812885894369492665, guid: 77bf0a7f94e16cc46b795dc24acd6a03, type: 3}
 --- !u!4 &223278548
 Transform:
   m_ObjectHideFlags: 0
@@ -3740,6 +3741,7 @@ MonoBehaviour:
   DownSideStage: {fileID: 8305096562292112771, guid: 585c8173cf84c8f4f912bd23f04ca7cd, type: 3}
   StartStage: {fileID: 8010877135519720254, guid: 0b08649c8dcd29143949507c8b787370, type: 3}
   GoalStage: {fileID: 8918904195635858936, guid: 9940f14b430ca074b8178734c94ec397, type: 3}
+  FallDetect: {fileID: 0}
 --- !u!1 &1924994928
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,7 +2,9 @@ using UnityEngine;
 using Perk.Model;   //パークの参照
 using Perk.Data;
 using Player.View;
-using System;    //パークのイベント
+using System;
+using Scene.View;
+using Scene.Controller;    //パークのイベント
 
 public class PlayerController : MonoBehaviour
 {
@@ -115,6 +117,8 @@ public class PlayerController : MonoBehaviour
         {
             status.InitializeStatus();
         }
+
+        GameView.OnInitialized?.Invoke(status.MaxLives, status.CurrentLives); // ゲーム全体の初期化が完了したことを通知
     }
 
     // Update is called once per frame
@@ -623,6 +627,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("ダメージを受ける");
             status.DecreaseLife();
+            GameView.OnDamaged?.Invoke(status.MaxLives, status.CurrentLives); // ダメージを受けたことを通知
 
             perk.InvincibleSeconds = 2f;
 
@@ -645,6 +650,7 @@ public class PlayerController : MonoBehaviour
     private void HandleGameOver()
     {
         Debug.Log("ゲームオーバー！タイトル画面へ戻るなどの処理");
+        GameSceneStateMachine.OnOver?.Invoke(); // ゲームオーバーイベントを通知
     }
 
     private System.Collections.IEnumerator InvincibleCount()
