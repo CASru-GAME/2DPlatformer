@@ -168,7 +168,7 @@ public class PlayerController : MonoBehaviour
         }
         
         //キャラクターの向きをきめる
-        if (spriteRenderer != null)
+        if (lockTimer <= 0 && spriteRenderer != null)
         {
             if (moveInput > 0)
             {
@@ -233,7 +233,8 @@ public class PlayerController : MonoBehaviour
         bool isGliding = !isGrounded && jumpHold && perk.CanGlide && rb.linearVelocity.y < 0;
 
         // 壁がある方向に進もうとしているなら、入力を 0 にして侵入を防ぐ（補助的処理）
-        float effectiveInput = isWalled ? 0 : moveInput;
+        //梯子に登れるときは壁判定があっても入力を消さないようにする
+        float effectiveInput = (isWalled && !canLadderClimb) ? 0 : moveInput;
 
         //空中ジャンプ回数のリセット
         if (isGrounded)
@@ -426,6 +427,19 @@ public class PlayerController : MonoBehaviour
         // パークの移動速度倍率を適用
         speed *= perk.MoveSpeedMultiplier;
 
+        //梯子の状態のときは上下の入力を受け付ける
+        if (psm.CurrentState == PlayerState.Ladder)
+        {
+            //はしごに触れているときの上下の移動処理
+            rb.gravityScale = 0; //重力の影響を消す
+            
+            //左右移動と上下移動を両方適用する
+            float vVelocity = verticalInput * ladderSpeed; // 上下の入力で移動する速度
+            float hVelocity = input * speed; // 左右の入力で移動する速度
+            rb.linearVelocity = new Vector2(hVelocity, vVelocity); // 上下の入力で移動する
+            return; // はしご状態のときはこれ以上の移動処理をしない
+        }
+        
         if (!isGrounded && input == 0)
         {
             // 入力がないときは現在の速度を維持する（空中での慣性を活かす）
@@ -435,19 +449,6 @@ public class PlayerController : MonoBehaviour
         {
             // 入力がある（または地面にいる）ときは通常の速度計算をする
             targetHorizontalVelocity = input * speed; 
-        }
-        
-        //梯子の状態のときは上下の入力を受け付ける
-        if (psm.CurrentState == PlayerState.Ladder)
-        {
-            //はしごに触れているときの上下の移動処理
-            rb.gravityScale = 0; //重力の影響を消す
-            
-            //左右移動と上下移動を両方適用する
-            float vVelocity = verticalInput * ladderSpeed; // 上下の入力で移動する速度
-            float hVelocity = targetHorizontalVelocity; // 左右の入力で移動する速度
-            rb.linearVelocity = new Vector2(hVelocity, vVelocity); // 上下の入力で移動する
-            return; // はしご状態のときはこれ以上の移動処理をしない
         }
         
         //壁つかまりのパーク
@@ -493,6 +494,18 @@ public class PlayerController : MonoBehaviour
         float direction = horizontalInput > 0 ? 1 : -1; // 右なら1、左なら-1
         Vector2 wallCheckPos = (Vector2)transform.position + new Vector2(direction * wallCheckOffset, 0);
        
+        //壁判定の中に梯子があるか確認
+        Collider2D hitLadder = Physics2D.OverlapBox(wallCheckPos, wallCheckSize, 0f, wallLayer);
+
+        if (hitLadder != null)
+        {
+            if (hitLadder.CompareTag("Ladder"))
+            {
+                return false; // 梯子がある場合は壁判定をしない
+            }
+            return true; // 梯子以外の壁がある場合は壁判定をする
+        }
+        
         return Physics2D.OverlapBox(wallCheckPos, wallCheckSize, 0f, wallLayer);
     }
 
@@ -527,7 +540,7 @@ public class PlayerController : MonoBehaviour
         if (spriteRenderer != null)
         {
             // 右に飛ぶなら右を向く、左に飛ぶなら左を向く
-            spriteRenderer.flipX = (kickDirection > 0); 
+            spriteRenderer.flipX = (kickDirection < 0); 
         }
         
         //壁キックの操作不能時間をセットする
@@ -580,11 +593,19 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("落下死");
             status.ForceGameOver();
+            GameSceneStateMachine.OnOver?.Invoke();
+        }
+        
+        //ゴール判定
+        if (collision.gameObject.CompareTag("Goal"))
+        {
+            Debug.Log("ゴール！");
+            GameSceneStateMachine.OnClear?.Invoke(); // ゴールイベントを通知
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
-    {
+    {   
         if (collision.gameObject.CompareTag("Ladder"))
         {
             canLadderClimb = false; // はしごから離れたら登れなくする
