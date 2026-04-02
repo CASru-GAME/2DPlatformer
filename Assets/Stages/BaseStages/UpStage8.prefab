@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4774534132721123230}
   - component: {fileID: 29220742935837252}
   - component: {fileID: 8922293859044573125}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Up8Trigger
   m_TagString: Ladder
   m_Icon: {fileID: 0}

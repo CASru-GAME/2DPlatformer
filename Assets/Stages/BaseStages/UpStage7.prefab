@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 5800264176482870904}
   - component: {fileID: 6756270696106928726}
   - component: {fileID: 2740012380249035804}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Up7Trigger
   m_TagString: Ladder
   m_Icon: {fileID: 0}
