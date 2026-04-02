@@ -135,7 +135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &260563610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,7 +149,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageGenerator3
   prefabManager: {fileID: 1461687131}
-  gimmicks: []
+  gimmicks:
+  - {fileID: 235197001706710232, guid: c7845076fa72b7d4e98d5f06c11c16c9, type: 3}
+  - {fileID: 3235712399853559485, guid: 48101c6196071154091df06beaa2c338, type: 3}
+  - {fileID: 5790123047733674694, guid: 843f6701fdde86b4a99996585e4997a6, type: 3}
+  - {fileID: 3116876009900185198, guid: 1249a722596165040b334740432f2781, type: 3}
+  - {fileID: 8911591238796431581, guid: 1f03b43741aa36a468767648381f8c73, type: 3}
+  - {fileID: 1577753587335420214, guid: 0e4912c121d4c5c40b4ff4a2192609ab, type: 3}
+  - {fileID: 4453628177152051107, guid: 8e2f6baf45a78ed4eacf53cab023dc71, type: 3}
   spawnPoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -175,6 +182,7 @@ MonoBehaviour:
   DownSideStage: {fileID: 0}
   StartStage: {fileID: 0}
   GoalStage: {fileID: 0}
+  FallDetect: {fileID: 8812885894369492665, guid: 77bf0a7f94e16cc46b795dc24acd6a03, type: 3}
 --- !u!4 &260563611
 Transform:
   m_ObjectHideFlags: 0
@@ -632,7 +640,7 @@ Transform:
   m_GameObject: {fileID: 976942708}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.47, y: 0.20000005, z: 0}
+  m_LocalPosition: {x: -4.4700003, y: 4.2, z: 0}
   m_LocalScale: {x: 0.9, y: 1.9, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -677,6 +685,7 @@ MonoBehaviour:
   debugIsClimbing: 0
   debugRemainJumpCount: 0
   debugCurrentState: 0
+  debugCurrentLives: 0
 --- !u!1 &1188618676
 GameObject:
   m_ObjectHideFlags: 0
