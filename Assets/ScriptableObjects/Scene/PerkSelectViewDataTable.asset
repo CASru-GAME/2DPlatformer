@@ -71,6 +71,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ede4eb1540c8dfb4dbf9891e2ca5b6e8, type: 2}
   - {fileID: 11400000, guid: 0f124773e6bcc3a4299d594ee3d5bb56, type: 2}
   - {fileID: 11400000, guid: 4c84fbeef343edf49b7701c42cb538f6, type: 2}
+  - {fileID: 11400000, guid: 9871a94d33d040a40acf83fda100161b, type: 2}
+  - {fileID: 11400000, guid: 14d979f8cb8f05f4c81576e12557b07d, type: 2}
+  - {fileID: 11400000, guid: 1a3a0bdb5960dbb4db963e6fa779543e, type: 2}
   perkEffectColor: {r: 0.25, g: 0.9541042, b: 1, a: 1}
   gimmickColor: {r: 1, g: 0.33490568, b: 0.9448627, a: 1}
   directionColor: {r: 1, g: 1, b: 1, a: 1}

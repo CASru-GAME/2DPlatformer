@@ -1,14 +1,18 @@
 using UnityEngine;
 using Perk.Model;   //パークの参照
-using Perk.Data;    //パークのイベント
-using Scene.View;   //シーンのイベント(ダメージ通知)
-using Scene.Controller; //シーンのコントローラー（ゲームオーバーの処理など）へのアクセス
+using Perk.Data;
+using Player.View;
+using System;
+using Scene.View;
+using Scene.Controller;    //パークのイベント
 
 public class PlayerController : MonoBehaviour
 {
     private PlayerMove psm;
 
-    private Animator anim; //アニメーターコンポーネントを入れる変数
+    //直前の状態
+    private PlayerState lastState;
+    [SerializeField] private PlayerView playerView;
 
     //プレイヤーの移動速度
     [Header("移動設定")]
@@ -31,8 +35,9 @@ public class PlayerController : MonoBehaviour
 
     private bool lastGrounded; // 前フレームの接地状態を保存する変数
     
-    //現在点滅中か（初期は点滅していない）
-    private bool isFlashing = false;
+    //現在無敵か（初期は無敵ではない）
+    private bool isInvincible = false;
+    private bool isInvincibleLast = false;
     
     // プレイヤーの残機などのステータスを管理するクラス
     private PlayerStatus status; 
@@ -79,13 +84,6 @@ public class PlayerController : MonoBehaviour
         psm = new PlayerMove();
         // 物理移動コンポーネントの取得
         rb = GetComponent<Rigidbody2D>();
-        
-        // アニメーターコンポーネントの取得
-        anim = GetComponent<Animator>();
-        if (anim == null)
-        {
-            Debug.LogWarning("アニメーターが付いていないのでアニメーションは再生されません");
-        }
 
         //spriteRendererの取得（インスペクターで設定していない場合は同じオブジェクトから探す）
         if (spriteRenderer == null)
@@ -112,6 +110,7 @@ public class PlayerController : MonoBehaviour
     {
         // 初期位置をrespawnPositionに設定
         respawnPosition = transform.position;
+        playerView.PlayAnimation("Idle");    
 
         // パークの初期化
         if (status != null)
@@ -119,7 +118,7 @@ public class PlayerController : MonoBehaviour
             status.InitializeStatus();
         }
 
-        GameView.OnInitialized?.Invoke(initialLives, initialLives); // プレイヤーの初期化が完了したことを通知
+        GameView.OnInitialized?.Invoke(status.MaxLives, status.CurrentLives); // ゲーム全体の初期化が完了したことを通知
     }
 
     // Update is called once per frame
@@ -169,7 +168,7 @@ public class PlayerController : MonoBehaviour
         }
         
         //キャラクターの向きをきめる
-        if (spriteRenderer != null)
+        if (lockTimer <= 0 && spriteRenderer != null)
         {
             if (moveInput > 0)
             {
@@ -188,10 +187,10 @@ public class PlayerController : MonoBehaviour
             shieldObject.SetActive(perk.HasShield);
         }
 
-        //無敵時間になったら点滅開始
-        if(perk.IsInvincible && !isFlashing)
+        //無敵時間になったら無敵効果開始
+        if(perk.IsInvincible && !isInvincible)
         {
-            StartCoroutine(FlashEffect());
+            StartCoroutine(InvincibleCount());
         }
         
         //無敵時間のカウントダウン
@@ -203,13 +202,6 @@ public class PlayerController : MonoBehaviour
             if (perk.InvincibleSeconds < 0)
             {
                 perk.InvincibleSeconds = 0;
-
-                //念のため点滅を止める（無敵時間が0になったときに点滅も止まるように）
-                if (spriteRenderer != null)
-                {
-                    // 点滅を止めて元の色に戻す
-                    spriteRenderer.color = new Color(1f, 1f, 1f, 1f);
-                }
             }
         }
         
@@ -241,7 +233,8 @@ public class PlayerController : MonoBehaviour
         bool isGliding = !isGrounded && jumpHold && perk.CanGlide && rb.linearVelocity.y < 0;
 
         // 壁がある方向に進もうとしているなら、入力を 0 にして侵入を防ぐ（補助的処理）
-        float effectiveInput = isWalled ? 0 : moveInput;
+        //梯子に登れるときは壁判定があっても入力を消さないようにする
+        float effectiveInput = (isWalled && !canLadderClimb) ? 0 : moveInput;
 
         //空中ジャンプ回数のリセット
         if (isGrounded)
@@ -277,12 +270,101 @@ public class PlayerController : MonoBehaviour
     //アニメーションの更新を行うメソッド
     private void UpdateAnimation()
     {
-        if (anim == null)
+        if (psm == null) return;
+        if(lastState == psm.CurrentState)
         {
-            return; // アニメーターがない場合は何もしない
+            if(!isInvincible && isInvincibleLast)
+            {
+                switch (psm.CurrentState)
+                {
+                    case PlayerState.Idle:
+                        playerView.PlayAnimation("Idle");
+                        break;
+                    case PlayerState.Walk:
+                        playerView.PlayAnimation("Walk");
+                        break;
+                    case PlayerState.Jump:
+                        playerView.PlayAnimation("Jump");
+                        break;
+                    case PlayerState.Climb:
+                        playerView.PlayAnimation("Jump");
+                        break;
+                    case PlayerState.Glide:
+                        playerView.PlayAnimation("Jump");
+                        break;
+                    case PlayerState.Ladder:
+                        playerView.PlayAnimation("Idle");
+                        break;
+                }
+            }
+            else if(isInvincible && !isInvincibleLast)
+            {
+                switch (psm.CurrentState)
+                {
+                    case PlayerState.Idle:
+                        playerView.PlayAnimation("IdleInv");
+                        break;
+                    case PlayerState.Walk:
+                        playerView.PlayAnimation("WalkInv");
+                        break;
+                    case PlayerState.Jump:
+                        playerView.PlayAnimation("JumpInv");
+                        break;
+                    case PlayerState.Climb:
+                        playerView.PlayAnimation("JumpInv");
+                        break;
+                    case PlayerState.Glide:
+                        playerView.PlayAnimation("JumpInv");
+                        break;
+                    case PlayerState.Ladder:
+                        playerView.PlayAnimation("IdleInv");
+                        break;
+                }
+            }
+            isInvincibleLast = isInvincible;
+            return;
         }
-        
-        anim.SetInteger("State", (int)psm.CurrentState);
+        lastState = psm.CurrentState;
+        switch (psm.CurrentState)
+        {
+            case PlayerState.Idle:
+                if (isInvincible)
+                    playerView.PlayAnimation("IdleInv");
+                else
+                    playerView.PlayAnimation("Idle");
+                break;
+            case PlayerState.Walk:
+                if (isInvincible)
+                    playerView.PlayAnimation("WalkInv");
+                else
+                    playerView.PlayAnimation("Walk");
+                break;
+            case PlayerState.Jump:
+                if (isInvincible)
+                    playerView.PlayAnimation("JumpInv");
+                else
+                    playerView.PlayAnimation("Jump");
+                break;
+            case PlayerState.Climb:
+                if (isInvincible)
+                    playerView.PlayAnimation("JumpInv");
+                else
+                    playerView.PlayAnimation("Jump");
+                break;
+            case PlayerState.Glide:
+                if (isInvincible)
+                    playerView.PlayAnimation("JumpInv");
+                else
+                    playerView.PlayAnimation("Jump");
+                break;
+            case PlayerState.Ladder:
+                if (isInvincible)
+                    playerView.PlayAnimation("IdleInv");
+                else
+                    playerView.PlayAnimation("Idle");
+                break;
+        }
+        isInvincibleLast = isInvincible;
     }
 
     //ジャンプの判断
@@ -345,6 +427,19 @@ public class PlayerController : MonoBehaviour
         // パークの移動速度倍率を適用
         speed *= perk.MoveSpeedMultiplier;
 
+        //梯子の状態のときは上下の入力を受け付ける
+        if (psm.CurrentState == PlayerState.Ladder)
+        {
+            //はしごに触れているときの上下の移動処理
+            rb.gravityScale = 0; //重力の影響を消す
+            
+            //左右移動と上下移動を両方適用する
+            float vVelocity = verticalInput * ladderSpeed; // 上下の入力で移動する速度
+            float hVelocity = input * speed; // 左右の入力で移動する速度
+            rb.linearVelocity = new Vector2(hVelocity, vVelocity); // 上下の入力で移動する
+            return; // はしご状態のときはこれ以上の移動処理をしない
+        }
+        
         if (!isGrounded && input == 0)
         {
             // 入力がないときは現在の速度を維持する（空中での慣性を活かす）
@@ -354,19 +449,6 @@ public class PlayerController : MonoBehaviour
         {
             // 入力がある（または地面にいる）ときは通常の速度計算をする
             targetHorizontalVelocity = input * speed; 
-        }
-        
-        //梯子の状態のときは上下の入力を受け付ける
-        if (psm.CurrentState == PlayerState.Ladder)
-        {
-            //はしごに触れているときの上下の移動処理
-            rb.gravityScale = 0; //重力の影響を消す
-            
-            //左右移動と上下移動を両方適用する
-            float vVelocity = verticalInput * ladderSpeed; // 上下の入力で移動する速度
-            float hVelocity = targetHorizontalVelocity; // 左右の入力で移動する速度
-            rb.linearVelocity = new Vector2(hVelocity, vVelocity); // 上下の入力で移動する
-            return; // はしご状態のときはこれ以上の移動処理をしない
         }
         
         //壁つかまりのパーク
@@ -412,6 +494,18 @@ public class PlayerController : MonoBehaviour
         float direction = horizontalInput > 0 ? 1 : -1; // 右なら1、左なら-1
         Vector2 wallCheckPos = (Vector2)transform.position + new Vector2(direction * wallCheckOffset, 0);
        
+        //壁判定の中に梯子があるか確認
+        Collider2D hitLadder = Physics2D.OverlapBox(wallCheckPos, wallCheckSize, 0f, wallLayer);
+
+        if (hitLadder != null)
+        {
+            if (hitLadder.CompareTag("Ladder"))
+            {
+                return false; // 梯子がある場合は壁判定をしない
+            }
+            return true; // 梯子以外の壁がある場合は壁判定をする
+        }
+        
         return Physics2D.OverlapBox(wallCheckPos, wallCheckSize, 0f, wallLayer);
     }
 
@@ -446,7 +540,7 @@ public class PlayerController : MonoBehaviour
         if (spriteRenderer != null)
         {
             // 右に飛ぶなら右を向く、左に飛ぶなら左を向く
-            spriteRenderer.flipX = (kickDirection > 0); 
+            spriteRenderer.flipX = (kickDirection < 0); 
         }
         
         //壁キックの操作不能時間をセットする
@@ -483,6 +577,8 @@ public class PlayerController : MonoBehaviour
         {
             Miss();
         }
+
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -497,26 +593,19 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("落下死");
             status.ForceGameOver();
+            GameSceneStateMachine.OnOver?.Invoke();
+        }
+        
+        //ゴール判定
+        if (collision.gameObject.CompareTag("Goal"))
+        {
+            Debug.Log("ゴール！");
+            GameSceneStateMachine.OnClear?.Invoke(); // ゴールイベントを通知
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
-    {
-        //ゴール判定 (ゲームクリア)
-        if (collision.gameObject.CompareTag("Goal"))
-        {
-        Debug.Log("ゴールに到達！");
-        GameSceneStateMachine.OnClear?.Invoke();
-        }
-
-        //落下死判定 (ゲームオーバー)
-        if (collision.gameObject.CompareTag("DeathZone"))
-        {
-            Debug.Log("落下死！");
-            // 残機に関わらず即ゲームオーバーにする場合
-            GameSceneStateMachine.OnOver?.Invoke();
-        }
-        
+    {   
         if (collision.gameObject.CompareTag("Ladder"))
         {
             canLadderClimb = false; // はしごから離れたら登れなくする
@@ -533,10 +622,8 @@ public class PlayerController : MonoBehaviour
             Debug.Log("ダメージを受けない（無敵状態）");
             return;
         }
-
-        GameView.OnDamaged?.Invoke(initialLives, status.CurrentLives); // ダメージを受けたイベントを通知
         
-        PerkEvents.Damaged?.Invoke(); // ダメージを受けたイベントをパークに通知
+        PerkEvents.Damaged?.Invoke(); // ダメージを受けたイベントを通知
         
         //強制ジャンプのパークがある場合
         if (perk.IsForcedJump)
@@ -561,6 +648,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("ダメージを受ける");
             status.DecreaseLife();
+            GameView.OnDamaged?.Invoke(status.MaxLives, status.CurrentLives); // ダメージを受けたことを通知
 
             perk.InvincibleSeconds = 2f;
 
@@ -582,37 +670,26 @@ public class PlayerController : MonoBehaviour
 
     private void HandleGameOver()
     {
-        Debug.Log("ゲームオーバー");
-        // ゲームオーバーの処理を呼び出す（例: シーン遷移、UI表示など）
-        GameSceneStateMachine.OnOver?.Invoke();
+        Debug.Log("ゲームオーバー！タイトル画面へ戻るなどの処理");
+        GameSceneStateMachine.OnOver?.Invoke(); // ゲームオーバーイベントを通知
     }
 
-    private System.Collections.IEnumerator FlashEffect()
+    private System.Collections.IEnumerator InvincibleCount()
     {
         if (spriteRenderer == null)
         {
             yield break; // SpriteRendererがない場合はコルーチンを終了
         }
         
-        isFlashing = true;
+        isInvincible = true;
         var perk = PerkEffectReference.Instance;
-
-        //元の色（RBG)と透明度（A）を保存しておく
-        Color originalColor = spriteRenderer.color;
 
         // 無敵時間が続く限り点滅を続ける
         while (perk.InvincibleSeconds > 0)
         {
-            // 半透明にする
-            Color dimmedColor = new (originalColor.r, originalColor.g, originalColor.b, 0.5f);
-            spriteRenderer.color = dimmedColor;
-            yield return new WaitForSeconds(0.1f); // 点滅の速さ
-            // 元の色に戻す
-            spriteRenderer.color = originalColor; // 元の色に戻す
-            yield return new WaitForSeconds(0.1f); // 点滅の速さ
-
+            yield return null;
         }
-        spriteRenderer.color = originalColor; // 念のため元の色に戻す
-        isFlashing = false;
+
+        isInvincible = false;
     }
 }
