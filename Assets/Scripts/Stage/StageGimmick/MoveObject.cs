@@ -13,4 +13,5 @@ public class MoveObject : MonoBehaviour
 
         transform.position = new Vector3(moveCenter.position.x + x, moveCenter.position.y, moveCenter.position.z);
     }
+
 }
