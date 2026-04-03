@@ -26,6 +26,7 @@ namespace Scene.Controller
             currentState.OnEnter();
             OnClear += ToClear;
             OnOver += ToOver;
+            SoundSourceObject.Instance.PlayGameBGM();
         }
 
         private void Update()
@@ -51,6 +52,7 @@ namespace Scene.Controller
         public void ToNext()
         {
             IsToNext = true;
+            SoundSourceObject.Instance.PlayButtonSE();
         }
 
         public void ToClear()
