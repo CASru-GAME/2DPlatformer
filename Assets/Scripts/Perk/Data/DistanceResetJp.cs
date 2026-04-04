@@ -11,7 +11,7 @@ namespace Perk.Data
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Initialize()
         {
-            PerkEffectStorage.RegisterPerk(18, () => new DistanceResetJp());
+            //PerkEffectStorage.RegisterPerk(18, () => new DistanceResetJp());
         }
 
         public override void Add()
@@ -49,6 +49,7 @@ namespace Perk.Data
             {
                 PerkEffectReference.Instance.ResetJumpCountStack += 1;
                 lastY = currentY;
+                PerkEffectStorage.AddUsedPerkID(18);
             }
         }
     }

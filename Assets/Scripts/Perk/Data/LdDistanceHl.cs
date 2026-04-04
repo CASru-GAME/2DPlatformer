@@ -36,8 +36,9 @@ namespace Perk.Data
         private void OnLand()
         {
             isLanding = true;
-            if(Vector2.Distance(lastPosition, currentPosition) >= 5f)
-                PerkEffectReference.Instance.HealStack += 2 * Stack;
+            if(Vector2.Distance(lastPosition, currentPosition) < 5f) return;
+            PerkEffectReference.Instance.HealStack += 2 * Stack;
+            PerkEffectStorage.AddUsedPerkID(14);
         }
 
         private void OnJump()

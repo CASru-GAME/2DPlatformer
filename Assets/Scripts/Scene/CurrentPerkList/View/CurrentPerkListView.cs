@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Perk.Model;
 using Scene.Data;
@@ -19,17 +20,21 @@ namespace Scene.View
         private readonly List<Text> currentUsePerkStackTextList = new();
         private readonly List<Text> currentUsePerkKeyTextList = new();
         private Vector2 lastUseImagePosition;
+        [SerializeField] private List<Image> usedPerkIconImageList;
         
         private void Start()
         {
             lastIconPosition = new Vector2(canvas.GetComponent<RectTransform>().rect.width / 2 - perkIconPrefab.rectTransform.sizeDelta.x / 2 - 10, canvas.GetComponent<RectTransform>().rect.height / 2 + perkIconPrefab.rectTransform.sizeDelta.y / 2);
             lastUseImagePosition = new Vector2(-canvas.GetComponent<RectTransform>().rect.width / 2 - usePerkImagePrefab.rectTransform.sizeDelta.x / 2 + 60, -canvas.GetComponent<RectTransform>().rect.height / 2 + usePerkImagePrefab.rectTransform.sizeDelta.y / 2 - 40);
+            for(int i = 0; i < usedPerkIconImageList.Count; i++)
+                usedPerkIconImageList[i].enabled = false;
         }
 
         private void Update()
         {
             UpdatePerkIcon();
             UpdateUsePerkIcon();
+            PlayUsedPerkAnimation();
         }
 
         private void UpdatePerkIcon()
@@ -97,6 +102,33 @@ namespace Scene.View
 
             if(currentUsePerkImageList.Count > 0)
                 lastUseImagePosition = currentUsePerkImageList[^1].rectTransform.anchoredPosition;
+        }
+
+        private void PlayUsedPerkAnimation()
+        {
+            for(int i = 0; i < currentPerkIconViewList.Count; i++)
+            {
+                int id = PerkEffectStorage.EnabledPerkList[i].id;
+                if(PerkEffectStorage.IsPerkUsed(id))
+                {
+                    for(int j = 0; j < usedPerkIconImageList.Count; j++)
+                    {
+                        if(usedPerkIconImageList[j].enabled) continue;
+                        StartCoroutine(ShowUsedPerkIconCoroutine(j, id));
+                        break;
+                    }
+                }
+            }
+            PerkEffectStorage.ResetUsedPerkIDList();
+        }
+
+        private IEnumerator ShowUsedPerkIconCoroutine(int boxIndex, int perkID)
+        {
+            Image usedIcon = usedPerkIconImageList[boxIndex];
+            usedIcon.sprite = perkSelectViewDataTable.GetPerkSprite(perkID);
+            usedIcon.enabled = true;
+            yield return new WaitForSeconds(0.3f);
+            usedIcon.enabled = false;
         }
     }
 }

@@ -22,6 +22,7 @@ namespace Scene.Controller
         {
             currentState = new PerkSceneStateInitial(this);
             currentState.OnEnter();
+            SoundSourceObject.Instance.PlayPerkBGM();
         }
 
         private void Update()
@@ -54,6 +55,7 @@ namespace Scene.Controller
 
         public void ToNextDelay(float delay)
         {
+            SoundSourceObject.Instance.PlayButtonSE();
             Invoke(nameof(ToNext), delay);
         }
 

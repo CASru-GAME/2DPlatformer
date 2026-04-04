@@ -27,7 +27,7 @@ namespace Scene.Controller
 
         public void OnExit()
         {
-
+            SoundSourceObject.Instance.PlayButtonSE();
         }
     }
 }

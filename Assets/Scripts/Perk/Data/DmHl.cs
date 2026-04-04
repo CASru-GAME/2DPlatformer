@@ -29,6 +29,7 @@ namespace Perk.Data
         {
             if(!DoesHitChance(50)) return;
             PerkEffectReference.Instance.HealStack += 2 * Stack;
+            PerkEffectStorage.AddUsedPerkID(4);
         }
     }
 }

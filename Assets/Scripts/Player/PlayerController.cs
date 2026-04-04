@@ -212,6 +212,7 @@ public class PlayerController : MonoBehaviour
         // デバッグ用：ジャンプ入力と接地状態をログに表示
         if (jumpDown)
         {
+            if(remainJumpCount > 0) SoundSourceObject.Instance.PlayJumpSE();
             Debug.Log($"ジャンプボタンを押した (接地: {isGrounded}) 残りジャンプ回数: {remainJumpCount}");
         }
 
@@ -219,6 +220,7 @@ public class PlayerController : MonoBehaviour
         if (isGrounded && !lastGrounded) // lastGroundedという変数を作って前回と比較
         {
             PerkEvents.Land?.Invoke();
+            SoundSourceObject.Instance.PlayLandSE();
         }
         lastGrounded = isGrounded;
         
@@ -649,6 +651,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("ダメージを受ける");
             status.DecreaseLife();
             GameView.OnDamaged?.Invoke(status.MaxLives, status.CurrentLives); // ダメージを受けたことを通知
+            SoundSourceObject.Instance.PlayDamagedSE();
 
             perk.InvincibleSeconds = 2f;
 
