@@ -50,7 +50,7 @@ namespace Scene.View
         {
             back.enabled = true;
             CanvasGroup group = back.GetComponent<CanvasGroup>();
-            for (float i = 0; i <= 1; i += Time.unscaledDeltaTime * 2)
+            for (float i = 0; i <= 1; i += Time.unscaledDeltaTime * 1f)
             {
                 Time.timeScale = 1 - i;
                 group.alpha = i;

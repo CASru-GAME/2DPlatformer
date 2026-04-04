@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using NUnit.Framework;
 using Scene.Data;
 using Scene.View;
@@ -69,14 +70,27 @@ namespace Scene.Controller
 
         public void LoadTitleSceneInvoke()
         {
-            Invoke(nameof(LoadTitleScene), TransitionView.Instance.TransitionHalfDuration);
+            StartCoroutine(LoadTitleSceneCoroutine());
         }
 
-        private void LoadTitleScene()
+        private IEnumerator LoadTitleSceneCoroutine()
         {
+            yield return new WaitForSecondsRealtime(TransitionView.Instance.TransitionHalfDuration);
             SceneManager.UnloadSceneAsync(sceneNameData.CurrentPerkSceneName);
             SceneManager.UnloadSceneAsync(sceneNameData.GameSceneName);
             SceneManager.LoadScene(sceneNameData.TitleSceneName, LoadSceneMode.Additive);
+            Time.timeScale = 1f;
+        }
+
+        public void PlayOpenInvoke()
+        {
+            StartCoroutine(PlayOpenCoroutine());
+        }
+
+        private IEnumerator PlayOpenCoroutine()
+        {
+            yield return new WaitForSecondsRealtime(0.1f);
+            TransitionView.Instance.PlayAnim("Open_1");
         }
     }
 }

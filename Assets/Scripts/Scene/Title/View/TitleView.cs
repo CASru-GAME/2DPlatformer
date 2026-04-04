@@ -6,6 +6,12 @@ namespace Scene.View
     {
         [SerializeField] private Canvas defaultCanvas;
         [SerializeField] private Canvas settingCanvas;
+        [SerializeField] private Canvas initialCanvas;
+
+        public void CloseInitial()
+        {
+            initialCanvas.enabled = false;
+        }
         
         public void OpenDefault()
         {
