@@ -1,3 +1,4 @@
+using System.Collections;
 using NUnit.Framework;
 using Scene.Data;
 using Scene.View;
@@ -66,8 +67,9 @@ namespace Scene.Controller
 
         private void LoadGameScene()
         {
-            SceneManager.UnloadSceneAsync(sceneNameData.PerkSceneName);
-            SceneManager.LoadScene(sceneNameData.GameSceneName, LoadSceneMode.Additive);
+            SceneManager.LoadScene(sceneNameData.GameSceneName);
+            SceneManager.LoadScene(sceneNameData.CurrentPerkSceneName, LoadSceneMode.Additive);
+            SceneManager.LoadScene(sceneNameData.TransitionSceneName, LoadSceneMode.Additive);
         }
     }
 }
