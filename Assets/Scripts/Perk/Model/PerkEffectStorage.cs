@@ -13,6 +13,7 @@ namespace Perk.Model
         private static readonly List<(int id, PerkEffect perkEffect)> usePerkList = new();
         public static IReadOnlyList<(int id, PerkEffect perkEffect)> UsePerkList => usePerkList;
         private static readonly List<int> perkIDList = new();
+        private static List<int> usedPerkIDList = new();
 
         public static void RegisterPerk(int id, Func<PerkEffect> perkEffectFactory)
         {
@@ -101,6 +102,23 @@ namespace Perk.Model
         {
             enabledPerkList.Clear();
             usePerkList.Clear();
+            usedPerkIDList.Clear();
+        }
+
+        public static void AddUsedPerkID(int id)
+        {
+            if (!usedPerkIDList.Contains(id))
+                usedPerkIDList.Add(id);
+        }
+
+        public static bool IsPerkUsed(int id)
+        {
+            return usedPerkIDList.Contains(id);
+        }
+
+        public static void ResetUsedPerkIDList()
+        {
+            usedPerkIDList.Clear();
         }
     }
 }

@@ -30,6 +30,7 @@ namespace Perk.Data
         private void OnDamaged()
         {
             PerkEffectReference.Instance.JumpInfinitySeconds += 2f * Stack;
+            PerkEffectStorage.AddUsedPerkID(5);
         }
 
         private static void OnUpdate()

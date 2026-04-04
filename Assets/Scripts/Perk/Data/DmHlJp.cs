@@ -32,6 +32,7 @@ namespace Perk.Data
             if(!DoesHitChance(50)) return;
             PerkEffectReference.Instance.HealStack += Stack; 
             PerkEffectReference.Instance.ForcedJumpStack += Stack;
+            PerkEffectStorage.AddUsedPerkID(1);
         }
 
         private void OnJump()

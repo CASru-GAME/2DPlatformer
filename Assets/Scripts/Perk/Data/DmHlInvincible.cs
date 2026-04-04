@@ -31,6 +31,7 @@ namespace Perk.Data
         {
             if(!DoesHitChance(50)) return;
             PerkEffectReference.Instance.InvincibleSeconds += 2f * Stack;
+            PerkEffectStorage.AddUsedPerkID(3);
         }
 
         private static void OnUpdate()
