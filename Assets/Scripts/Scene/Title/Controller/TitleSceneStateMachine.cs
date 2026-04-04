@@ -23,6 +23,7 @@ namespace Scene.Controller
         {
             currentState = new TitleSceneStateInitial(this);
             currentState.OnEnter();
+            SoundSourceObject.Instance.PlayTitleBGM();
         }
 
         private void Update()
@@ -49,21 +50,25 @@ namespace Scene.Controller
         public void ToPerk()
         {
             IsToPerk = true;
+            SoundSourceObject.Instance.PlayButtonSE();
         }
 
         public void ToSetting()
         {
             IsToSetting = true;
+            SoundSourceObject.Instance.PlayButtonSE();
         }
 
         public void ToDefault()
         {
             IsToDefault = true;
+            SoundSourceObject.Instance.PlayButtonSE();
         }
 
         public void ToExit()
         {
             IsToExit = true;
+            SoundSourceObject.Instance.PlayButtonSE();
         }
 
         public void LoadPerkSceneInvoke()

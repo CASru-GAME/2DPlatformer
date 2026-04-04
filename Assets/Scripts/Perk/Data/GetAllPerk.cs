@@ -30,6 +30,7 @@ namespace Perk.Data
         {
             for(int i = 0; i < Stack; i++)
                 PerkEffectStorage.RemovePerkAtRandom(22);
+            PerkEffectStorage.AddUsedPerkID(22);
         }
     }
 }

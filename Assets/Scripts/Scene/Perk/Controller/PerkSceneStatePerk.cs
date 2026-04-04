@@ -16,6 +16,7 @@ namespace Scene.Controller
         public void OnEnter()
         {
             sM.SetSelectPerk(currentPerkCount);
+            if(currentPerkCount != 1) SoundSourceObject.Instance.PlayButtonSE();
         }
 
         public void HandleInput()

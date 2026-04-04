@@ -29,6 +29,8 @@ namespace Perk.Data
 
         private void OnUpdate()
         {
+            if(PerkEffectReference.Instance.ShieldStack < Stack) 
+                PerkEffectStorage.AddUsedPerkID(7);
             Stack = PerkEffectReference.Instance.ShieldStack;
             if(Stack == 0) Remove();
         }
