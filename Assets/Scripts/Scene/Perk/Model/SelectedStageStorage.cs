@@ -24,7 +24,7 @@ namespace Scene.Model
         private readonly int[] currentDirectionIDs = new int[3];
         public int[] CurrentDirectionIDs => currentDirectionIDs;
         private readonly int MaxStageID = 18;
-        private readonly int MaxGimmickID = 5;
+        private readonly int MaxGimmickID = 12;
         private int currentSelectedDirectionID = 0;
 
         public void SetRandomIDs(int currentPickCount)
