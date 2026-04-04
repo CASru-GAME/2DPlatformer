@@ -372,12 +372,20 @@ public class PlayerController : MonoBehaviour
     //ジャンプの判断
     private void HandleJump(bool isGrounded, bool isNearWall, bool isWalled,PerkEffectReference perk)
     {
+        //地面にいるなら跳べる
+        if (isGrounded)
+        {
+            JumpInternal(perk);// ジャンプ処理を実行する共通の関数を呼び出す
+            return;
+        }
+        
         //地面にいなくて壁に触れていて、壁の方向に進む入力があるときは壁キック
         if (!isGrounded && isNearWall)
         {
             //壁のある方向に進む入力があるかどうかを判定するために、moveInputの値と壁の位置から判断する
-            bool pressingTowardRightwall = (moveInput > 0 && CheckWall(1f));
-            bool pressingTowardLeftwall = (moveInput < 0 && CheckWall(-1f));
+            float horizontalInput = Input.GetAxisRaw("Horizontal");//壁キック後の操作不能時間中も壁キックの入力を受け付けるために、ここで直接入力を取得する
+            bool pressingTowardRightwall = (horizontalInput > 0 && CheckWall(1f));
+            bool pressingTowardLeftwall = (horizontalInput < 0 && CheckWall(-1f));
             
             if(pressingTowardRightwall || pressingTowardLeftwall)
             {
@@ -387,29 +395,16 @@ public class PlayerController : MonoBehaviour
             }
             
         }
-        
-        //壁つかまりのパークがあって壁についているときはジャンプできない
-        if (isWalled && !isGrounded && perk.CanClimb)
+
+        //空中ジャンプ判定
+        if (!isGrounded && remainJumpCount > 0)
         {
-            return; // ジャンプさせない
-        }
-
-        //地面にいるなら跳べる
-        if (isGrounded || remainJumpCount > 0)
-        {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0); // ジャンプ前に一度垂直速度をリセットしてからジャンプ力を加える
-            
-            // ジャンプの処理（ジャンプ力の倍率も適用）
-            ApplyJump(perk.JumpPowerMultiplier);
-
-            //ジャンプイベントの通知
-            PerkEvents.Jump?.Invoke();
-
-            //空中ジャンプの回数を減らす
-            if (!isGrounded)
+            if (isWalled && perk.CanClimb)
             {
-                remainJumpCount--;
+                return; // 壁つかまり状態のときは空中ジャンプできないようにする
             }
+            
+            JumpInternal(perk);
         }
     }
     
@@ -432,14 +427,22 @@ public class PlayerController : MonoBehaviour
         //梯子の状態のときは上下の入力を受け付ける
         if (psm.CurrentState == PlayerState.Ladder)
         {
-            //はしごに触れているときの上下の移動処理
-            rb.gravityScale = 0; //重力の影響を消す
+            //地面にいるときは重力を通常にして、はしご移動をさせない
+            if(isGrounded && verticalInput < 0)
+            {
+                rb.gravityScale = defaultGravityScale; // 地面にいるときは重力を通常に戻す
+            }
+            else
+            {
+                //はしごに触れているときの上下の移動処理
+                rb.gravityScale = 0; //重力の影響を消す
             
-            //左右移動と上下移動を両方適用する
-            float vVelocity = verticalInput * ladderSpeed; // 上下の入力で移動する速度
-            float hVelocity = input * speed; // 左右の入力で移動する速度
-            rb.linearVelocity = new Vector2(hVelocity, vVelocity); // 上下の入力で移動する
-            return; // はしご状態のときはこれ以上の移動処理をしない
+                //左右移動と上下移動を両方適用する
+                float vVelocity = verticalInput * ladderSpeed; // 上下の入力で移動する速度
+                float hVelocity = input * speed; // 左右の入力で移動する速度
+                rb.linearVelocity = new Vector2(hVelocity, vVelocity); // 上下の入力で移動する
+                return; // はしご状態のときはこれ以上の移動処理をしない
+            }
         }
         
         if (!isGrounded && input == 0)
@@ -480,6 +483,22 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector2(targetHorizontalVelocity, currentYVelocity);
     }
 
+    private void JumpInternal(PerkEffectReference perk)
+    {
+        //垂直速度をリセットしてからジャンプすることで、空中ジャンプのときもジャンプ力が一定になるようにする
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0); // ジャンプ前に垂直速度をリセットしてジャンプ力が一定になるようにする
+        
+        // ジャンプを実行
+        ApplyJump(perk.JumpPowerMultiplier);
+        PerkEvents.Jump?.Invoke(); // ジャンプイベントの通知
+
+        // 空中ジャンプ回数を減らす（地面にいるときは減らさない）
+        if (!lastGrounded)
+        {
+            remainJumpCount--;
+        }
+    }
+    
     private void ApplyJump(float jumpPowerMultiplier = 1.0f)
     {
         //jumpFoorceが正であることを確認
