@@ -2764,7 +2764,7 @@ MonoBehaviour:
   initialLives: 3
   respawnPosition: {x: 0, y: 0}
   glideGravityMultiplier: 0.1
-  wallKickForce: {x: 7, y: 4.5}
+  wallKickForce: {x: 7, y: 5}
   wallKickLockDuration: 0.45
   debugIsGrounded: 0
   debugIsWalled: 0
