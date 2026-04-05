@@ -33,7 +33,7 @@ namespace Perk.Data
             {
                 isAffective = true;
                 PerkEffectReference.Instance.AdditionalJumpCount += Stack;
-                PerkEffectStorage.AddUsedPerkID(6);
+                PerkEffectStorage.AddUsedPerkText("ジャンプ追加");
             }
             else if (currentLife > 2 && isAffective)
             {

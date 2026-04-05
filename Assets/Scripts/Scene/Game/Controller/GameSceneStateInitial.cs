@@ -15,7 +15,7 @@ namespace Scene.Controller
 
         public void OnEnter()
         {
-            TransitionView.Instance.PlayAnim("Open_1");
+            sM.PlayOpenInvoke();
         }
 
         public void HandleInput()

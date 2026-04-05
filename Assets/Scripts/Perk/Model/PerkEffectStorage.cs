@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Perk.Data;
+using UnityEngine.UI;
 
 namespace Perk.Model
 {
@@ -13,7 +14,7 @@ namespace Perk.Model
         private static readonly List<(int id, PerkEffect perkEffect)> usePerkList = new();
         public static IReadOnlyList<(int id, PerkEffect perkEffect)> UsePerkList => usePerkList;
         private static readonly List<int> perkIDList = new();
-        private static List<int> usedPerkIDList = new();
+        private static List<string> usedPerkTextList = new();
 
         public static void RegisterPerk(int id, Func<PerkEffect> perkEffectFactory)
         {
@@ -102,23 +103,26 @@ namespace Perk.Model
         {
             enabledPerkList.Clear();
             usePerkList.Clear();
-            usedPerkIDList.Clear();
+            usedPerkTextList.Clear();
         }
 
-        public static void AddUsedPerkID(int id)
+        public static void AddUsedPerkText(string effectText)
         {
-            if (!usedPerkIDList.Contains(id))
-                usedPerkIDList.Add(id);
+            if (!usedPerkTextList.Contains(effectText))
+                usedPerkTextList.Add(effectText);
         }
 
-        public static bool IsPerkUsed(int id)
+        public static string GetUsedPerkText()
         {
-            return usedPerkIDList.Contains(id);
+            if (usedPerkTextList.Count == 0) return null;
+            string text = usedPerkTextList[0];
+            usedPerkTextList.RemoveAt(0);
+            return text;
         }
 
-        public static void ResetUsedPerkIDList()
+        public static void ResetUsedPerkTextList()
         {
-            usedPerkIDList.Clear();
+            usedPerkTextList.Clear();
         }
     }
 }

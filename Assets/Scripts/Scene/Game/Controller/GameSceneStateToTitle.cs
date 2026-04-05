@@ -15,7 +15,6 @@ namespace Scene.Controller
 
         public void OnEnter()
         {
-            Time.timeScale = 1f;
             TransitionView.Instance.PlayAnim("Close_1");
             sM.LoadTitleSceneInvoke();
         }

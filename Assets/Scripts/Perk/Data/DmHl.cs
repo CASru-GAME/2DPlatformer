@@ -27,9 +27,9 @@ namespace Perk.Data
 
         private void OnDamaged()
         {
-            if(!DoesHitChance(50)) return;
+            if(!DoesHitChance(20)) return;
             PerkEffectReference.Instance.HealStack += 2 * Stack;
-            PerkEffectStorage.AddUsedPerkID(4);
+            PerkEffectStorage.AddUsedPerkText("HP回復");
         }
     }
 }

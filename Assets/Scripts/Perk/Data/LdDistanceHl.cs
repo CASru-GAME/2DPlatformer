@@ -37,20 +37,20 @@ namespace Perk.Data
         {
             isLanding = true;
             if(Vector2.Distance(lastPosition, currentPosition) < 5f) return;
-            PerkEffectReference.Instance.HealStack += 2 * Stack;
-            PerkEffectStorage.AddUsedPerkID(14);
+            PerkEffectReference.Instance.HealStack += Stack;
+            PerkEffectStorage.AddUsedPerkText("回復");
         }
 
         private void OnJump()
         {
             if(!isLanding) return;
-            lastPosition = currentPosition;
             isLanding = false;
         }
 
         private void OnCheckPosition(Vector2 position)
         {
             currentPosition = position;
+            if(isLanding) lastPosition = currentPosition;
         }
     }
 }

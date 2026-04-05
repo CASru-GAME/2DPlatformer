@@ -49,7 +49,7 @@ namespace Perk.Data
             {
                 PerkEffectReference.Instance.ResetJumpCountStack += 1;
                 lastY = currentY;
-                PerkEffectStorage.AddUsedPerkID(18);
+                //PerkEffectStorage.AddUsedPerkText(18);
             }
         }
     }

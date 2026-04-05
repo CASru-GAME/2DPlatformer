@@ -81,5 +81,16 @@ namespace Scene.Controller
             SceneManager.UnloadSceneAsync(sceneNameData.TitleSceneName);
             SceneManager.LoadScene(sceneNameData.PerkSceneName, LoadSceneMode.Additive);
         }
+
+        public void PlayOpenInvoke()
+        {
+            Invoke(nameof(PlayOpen), 0.1f);
+        }
+
+        private void PlayOpen()
+        {
+            TransitionView.Instance.PlayAnim("Open_1");
+            titleView.CloseInitial();
+        }
     }
 }

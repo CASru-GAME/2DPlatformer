@@ -37,7 +37,7 @@ namespace Perk.Data
             if(isCharging) return;
             isCharging = true;
             PerkEffectReference.Instance.JumpPowerMultiplierBase += Stack * 0.2f;
-            PerkEffectStorage.AddUsedPerkID(12);
+            PerkEffectStorage.AddUsedPerkText("次のジャンプ強化");
         }
 
         private void OnJump()

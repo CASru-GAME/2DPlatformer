@@ -8,7 +8,7 @@ namespace Perk.Data
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Initialize()
         {
-            PerkEffectStorage.RegisterPerk(1, () => new DmHlJp());
+            //PerkEffectStorage.RegisterPerk(1, () => new DmHlJp());
         }
 
         public override void Add()
@@ -25,14 +25,15 @@ namespace Perk.Data
             if(Stack != 0) return;
             PerkEvents.Damaged -= OnDamaged;
             PerkEvents.Jump -= OnJump;
+            PerkEffectReference.Instance.ForcedJumpStack = 0;
         }
 
         private void OnDamaged()
         {
-            if(!DoesHitChance(50)) return;
-            PerkEffectReference.Instance.HealStack += Stack; 
+            if(!DoesHitChance(20)) return;
+            //PerkEffectReference.Instance.HealStack += Stack; 
             PerkEffectReference.Instance.ForcedJumpStack += Stack;
-            PerkEffectStorage.AddUsedPerkID(1);
+            //PerkEffectStorage.AddUsedPerkText(1);
         }
 
         private void OnJump()

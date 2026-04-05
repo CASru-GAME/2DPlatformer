@@ -17,9 +17,9 @@ namespace Scene.Controller
         public void OnEnter()
         {
             PerkEffectStorage.ResetAllPerks();
-            SceneManager.LoadScene(sM.SceneNameData.TransitionSceneName, LoadSceneMode.Additive);
-            if (TransitionView.Instance != null)
-                TransitionView.Instance.PlayAnim("Open_1");
+            if(!SceneManager.GetSceneByName(sM.SceneNameData.TransitionSceneName).isLoaded)
+                SceneManager.LoadScene(sM.SceneNameData.TransitionSceneName, LoadSceneMode.Additive);
+            sM.PlayOpenInvoke();
             sM.ChangeState(new TitleSceneStateDefault(sM));
         }
 

@@ -11,7 +11,7 @@ namespace Perk.Data
 
         public bool DoesHitChance(int luck)
         {
-            return UnityEngine.Random.Range(0, 100) < luck + PerkEffectReference.Instance.AdditionalLuck;
+            return UnityEngine.Random.Range(0, 100) < luck * PerkEffectReference.Instance.LuckMultiplier;
         }
     }
 }
