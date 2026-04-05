@@ -107,6 +107,7 @@ public class StageGenerator3 : MonoBehaviour
         if (direction == 1)
         {
             Instantiate(GoalStage, new Vector3(position.x + 10, position.y, position.z), Quaternion.identity);
+            Instantiate(FallDetect, new Vector3(position.x + 10, position.y - 7, position.z), Quaternion.identity);
         }
 
         if (direction == 2)
@@ -117,6 +118,8 @@ public class StageGenerator3 : MonoBehaviour
         if (direction == 3)
         {
             Instantiate(GoalStage, new Vector3(position.x, position.y - 10, position.z), Quaternion.identity);
+            Instantiate(FallDetect, new Vector3(position.x, position.y - 17, position.z), Quaternion.identity);
+            Instantiate(FallDetect, new Vector3(position.x - 10, position.y - 17, position.z), Quaternion.identity);
         }
     }
 }
