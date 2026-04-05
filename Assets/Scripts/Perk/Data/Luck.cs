@@ -14,13 +14,13 @@ namespace Perk.Data
 
         public override void Add()
         {
-            PerkEffectReference.Instance.AdditionalLuck += 25;
+            PerkEffectReference.Instance.LuckMultiplier += 2;
             Stack++;
         }
 
         public override void Remove()
         {
-            PerkEffectReference.Instance.AdditionalLuck -= 25;
+            PerkEffectReference.Instance.LuckMultiplier -= 2;
             Stack--;
         }
     }

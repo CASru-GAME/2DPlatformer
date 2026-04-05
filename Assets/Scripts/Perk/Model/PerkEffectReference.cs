@@ -36,7 +36,7 @@ namespace Perk.Model
         public bool IsJumpInfinity => JumpInfinitySeconds > 0;
         //追加のジャンプ回数
         public int AdditionalJumpCount = 0;
-        public int AdditionalLuck = 0;
+        public int LuckMultiplier = 1;
         //追加の最大体力
         public int AdditionalMaxLife = 0;
         public int ClimbStack = 0;

@@ -22,16 +22,16 @@ namespace Perk.Data
         public override void Remove()
         {
             Stack--;
-            PerkEffectReference.Instance.InvincibleSeconds -= 2f;
+            PerkEffectReference.Instance.InvincibleSeconds -= 4f;
             if(Stack != 0) return;
             PerkEvents.Jump -= OnJump;
         }
 
         private void OnJump()
         {
-            if(!DoesHitChance(50)) return;
-            PerkEffectReference.Instance.InvincibleSeconds += 2f * Stack;
-            PerkEffectStorage.AddUsedPerkID(13);
+            if(!DoesHitChance(10)) return;
+            PerkEffectReference.Instance.InvincibleSeconds += 4f * Stack;
+            PerkEffectStorage.AddUsedPerkText("無敵獲得");
         }
 
         private static void OnUpdate()

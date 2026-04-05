@@ -33,9 +33,10 @@ namespace Perk.Data
 
         private void OnDamaged()
         {
+            if(isCharging) return;
             PerkEffectReference.Instance.JumpPowerMultiplierBase += Stack * 0.2f; 
             isCharging = true;
-            PerkEffectStorage.AddUsedPerkID(2);
+            PerkEffectStorage.AddUsedPerkText("次のジャンプ強化");
         }
 
         private void OnJump()

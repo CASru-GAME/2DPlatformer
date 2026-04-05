@@ -30,7 +30,7 @@ namespace Perk.Data
         private void OnDamaged()
         {
             PerkEffectReference.Instance.JumpInfinitySeconds += 2f * Stack;
-            PerkEffectStorage.AddUsedPerkID(5);
+            PerkEffectStorage.AddUsedPerkText("無敵獲得");
         }
 
         private static void OnUpdate()

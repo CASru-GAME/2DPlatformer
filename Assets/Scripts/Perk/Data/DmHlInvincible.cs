@@ -8,8 +8,8 @@ namespace Perk.Data
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Initialize()
         {
-            PerkEffectStorage.RegisterPerk(3, () => new DmHlInvincible());
-            PerkEvents.Update += OnUpdate;
+            //PerkEffectStorage.RegisterPerk(3, () => new DmHlInvincible());
+            //PerkEvents.Update += OnUpdate;
         }
 
         public override void Add()
@@ -29,9 +29,9 @@ namespace Perk.Data
 
         private void OnDamaged()
         {
-            if(!DoesHitChance(50)) return;
+            if(!DoesHitChance(20)) return;
             PerkEffectReference.Instance.InvincibleSeconds += 2f * Stack;
-            PerkEffectStorage.AddUsedPerkID(3);
+            PerkEffectStorage.AddUsedPerkText("無敵獲得");
         }
 
         private static void OnUpdate()
