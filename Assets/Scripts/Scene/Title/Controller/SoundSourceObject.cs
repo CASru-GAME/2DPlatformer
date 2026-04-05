@@ -64,6 +64,7 @@ namespace Scene.Controller
         {
             bgmSourceA.Stop();
             bgmSourceB.Stop();
+            seSource.Stop();
             bgmSourceA.clip = titleBGMA;
             bgmSourceB.clip = titleBGMB;
             StartCoroutine(PlayBGMCoroutine());
