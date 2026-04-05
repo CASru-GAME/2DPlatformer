@@ -22,7 +22,7 @@ namespace Perk.Data
         public override void Remove()
         {
             Stack--;
-            if(Stack != 0) return;
+            if(Stack > 0) return;
             PerkEvents.Land -= OnLand;
         }
 

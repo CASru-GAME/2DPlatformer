@@ -23,7 +23,7 @@ namespace Perk.Data
         {
             PerkEffectReference.Instance.ShieldStack = Mathf.Max(0, PerkEffectReference.Instance.ShieldStack - 1);
             Stack--;
-            if(Stack != 0) return;
+            if(Stack > 0) return;
             PerkEvents.Update -= OnUpdate;
         }
 
@@ -32,7 +32,11 @@ namespace Perk.Data
             if(PerkEffectReference.Instance.ShieldStack < Stack) 
                 PerkEffectStorage.AddUsedPerkText("シールド消失");
             Stack = PerkEffectReference.Instance.ShieldStack;
-            if(Stack == 0) Remove();
+            if(Stack > 0) return;
+            PerkEvents.Update -= OnUpdate;
+            Stack = 0;
+            PerkEffectReference.Instance.ShieldStack = 0;
+            PerkEffectStorage.RemovePerk(7);
         }
     }
 }
