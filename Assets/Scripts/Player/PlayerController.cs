@@ -37,7 +37,6 @@ public class PlayerController : MonoBehaviour
     
     //現在無敵か（初期は無敵ではない）
     private bool isInvincible = false;
-    private bool isInvincibleLast = false;
     
     // プレイヤーの残機などのステータスを管理するクラス
     private PlayerStatus status; 
@@ -120,7 +119,7 @@ public class PlayerController : MonoBehaviour
             status.InitializeStatus();
         }
 
-        GameView.OnInitialized?.Invoke(status.MaxLives, status.CurrentLives); // ゲーム全体の初期化が完了したことを通知
+        GameView.Update?.Invoke(status.MaxLives, status.CurrentLives); // ゲーム全体の初期化が完了したことを通知
     }
 
     // Update is called once per frame
@@ -139,9 +138,14 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        //体力最大値の更新
+        status.SetMaxLives();
+
         //回復のパークの効果
         if (perk.CanHeal)
         {
+            SoundSourceObject.Instance.PlayHealSE();
+
             for (int i =0; i < perk.HealStack; i++)
             {
                 status.AddLife();
@@ -154,6 +158,7 @@ public class PlayerController : MonoBehaviour
         PerkEvents.CheckLife?.Invoke(status.CurrentLives);
         PerkEvents.CheckPosition?.Invoke(transform.position);
         PerkEvents.Update?.Invoke();
+        GameView.Update?.Invoke(status.MaxLives, status.CurrentLives);
 
         //入力の取得をする関数を空の状態で定義
         moveInput = 0;
@@ -288,100 +293,31 @@ public class PlayerController : MonoBehaviour
     private void UpdateAnimation()
     {
         if (psm == null) return;
-        if(lastState == psm.CurrentState)
+        if(lastState != psm.CurrentState)
         {
-            if(!isInvincible && isInvincibleLast)
+            switch (psm.CurrentState)
             {
-                switch (psm.CurrentState)
-                {
-                    case PlayerState.Idle:
-                        playerView.PlayAnimation("Idle");
-                        break;
-                    case PlayerState.Walk:
-                        playerView.PlayAnimation("Walk");
-                        break;
-                    case PlayerState.Jump:
-                        playerView.PlayAnimation("Jump");
-                        break;
-                    case PlayerState.Climb:
-                        playerView.PlayAnimation("Jump");
-                        break;
-                    case PlayerState.Glide:
-                        playerView.PlayAnimation("Jump");
-                        break;
-                    case PlayerState.Ladder:
-                        playerView.PlayAnimation("Idle");
-                        break;
-                }
-            }
-            else if(isInvincible && !isInvincibleLast)
-            {
-                switch (psm.CurrentState)
-                {
-                    case PlayerState.Idle:
-                        playerView.PlayAnimation("IdleInv");
-                        break;
-                    case PlayerState.Walk:
-                        playerView.PlayAnimation("WalkInv");
-                        break;
-                    case PlayerState.Jump:
-                        playerView.PlayAnimation("JumpInv");
-                        break;
-                    case PlayerState.Climb:
-                        playerView.PlayAnimation("JumpInv");
-                        break;
-                    case PlayerState.Glide:
-                        playerView.PlayAnimation("JumpInv");
-                        break;
-                    case PlayerState.Ladder:
-                        playerView.PlayAnimation("IdleInv");
-                        break;
-                }
-            }
-            isInvincibleLast = isInvincible;
-            return;
-        }
-        lastState = psm.CurrentState;
-        switch (psm.CurrentState)
-        {
-            case PlayerState.Idle:
-                if (isInvincible)
-                    playerView.PlayAnimation("IdleInv");
-                else
+                case PlayerState.Idle:
                     playerView.PlayAnimation("Idle");
-                break;
-            case PlayerState.Walk:
-                if (isInvincible)
-                    playerView.PlayAnimation("WalkInv");
-                else
+                    break;
+                case PlayerState.Walk:
                     playerView.PlayAnimation("Walk");
-                break;
-            case PlayerState.Jump:
-                if (isInvincible)
-                    playerView.PlayAnimation("JumpInv");
-                else
+                    break;
+                case PlayerState.Jump:
                     playerView.PlayAnimation("Jump");
-                break;
-            case PlayerState.Climb:
-                if (isInvincible)
-                    playerView.PlayAnimation("JumpInv");
-                else
+                    break;
+                case PlayerState.Climb:
                     playerView.PlayAnimation("Jump");
-                break;
-            case PlayerState.Glide:
-                if (isInvincible)
-                    playerView.PlayAnimation("JumpInv");
-                else
+                    break;
+                case PlayerState.Glide:
                     playerView.PlayAnimation("Jump");
-                break;
-            case PlayerState.Ladder:
-                if (isInvincible)
-                    playerView.PlayAnimation("IdleInv");
-                else
+                    break;
+                case PlayerState.Ladder:
                     playerView.PlayAnimation("Idle");
-                break;
+                    break;
+            }
+            lastState = psm.CurrentState;
         }
-        isInvincibleLast = isInvincible;
     }
 
     //ジャンプの判断
@@ -510,6 +446,11 @@ public class PlayerController : MonoBehaviour
         // 空中ジャンプ回数を減らす（地面にいるときは減らさない）
         if (!lastGrounded)
         {
+            if(perk.IsJumpInfinity)
+            {
+                // ジャンプ無限のパークがあるときは空中ジャンプ回数を減らさない
+                return;
+            }
             remainJumpCount--;
         }
     }
@@ -686,11 +627,10 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("ダメージを受ける");
             status.DecreaseLife();
-            GameView.OnDamaged?.Invoke(status.MaxLives, status.CurrentLives); // ダメージを受けたことを通知
+            GameView.Update?.Invoke(status.MaxLives, status.CurrentLives); // ダメージを受けたことを通知
             SoundSourceObject.Instance.PlayDamagedSE();
 
             perk.InvincibleSeconds = 2f;
-
         }
         else
         {
@@ -714,21 +654,23 @@ public class PlayerController : MonoBehaviour
     }
 
     private System.Collections.IEnumerator InvincibleCount()
-    {
-        if (spriteRenderer == null)
-        {
-            yield break; // SpriteRendererがない場合はコルーチンを終了
-        }
-        
+    {   
         isInvincible = true;
+        SoundSourceObject.Instance.PlayInvincibleSE();
         var perk = PerkEffectReference.Instance;
 
         // 無敵時間が続く限り点滅を続ける
         while (perk.InvincibleSeconds > 0)
         {
-            yield return null;
+            // 点滅の周期を0.2秒に設定
+            spriteRenderer.color = new Color(1f, 1f, 1f, 0f); // 透明にする
+            yield return new WaitForSeconds(0.1f);
+            spriteRenderer.color = new Color(1f, 1f, 1f, 1f); // 元の色に戻す
+            yield return new WaitForSeconds(0.1f);
         }
 
+        // 無敵時間が終わったら表示を戻して無敵状態を解除する
+        spriteRenderer.color = new Color(1f, 1f, 1f, 1f); // 元の色に戻す
         isInvincible = false;
     }
 }

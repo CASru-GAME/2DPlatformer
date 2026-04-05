@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,6 +28,12 @@ namespace Scene.View
 
         public void PlayAnim(string animName)
         {
+            StartCoroutine(PlayAnimCoroutine(animName));
+        }
+
+        private IEnumerator PlayAnimCoroutine(string animName)
+        {
+            yield return null;
             if(initialImage.enabled)
                 initialImage.enabled = false;
             animator.speed = 1f / transitionDuration;

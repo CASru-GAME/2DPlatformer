@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using Perk.Model;
+using Scene.Controller;
 
 public class PlayerStatus
 {
@@ -36,6 +37,7 @@ public class PlayerStatus
         {
             perk.ShieldStack--;
             Debug.Log($"ガード　残りシールドスタック: {perk.ShieldStack}");
+            SoundSourceObject.Instance.PlayShieldSE();
             
             // シールドを消費したらしばらく無敵
             perk.InvincibleSeconds = 1f; // 例: 1秒間無敵
@@ -99,5 +101,15 @@ public class PlayerStatus
     {
         CurrentLives = MaxLives;
         OnLivesChanged?.Invoke(CurrentLives);
+    }
+
+    public void SetMaxLives()
+    {
+        MaxLives = 3 + PerkEffectReference.Instance.AdditionalMaxLife; // 基本残機3にパークの追加残機を加算
+        if (CurrentLives > MaxLives)
+        {
+            CurrentLives = MaxLives;
+            OnLivesChanged?.Invoke(CurrentLives);
+        }
     }
 }

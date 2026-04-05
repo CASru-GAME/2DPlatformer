@@ -16,7 +16,8 @@ namespace Perk.Data
 
         public void Reset()
         {
-            for (int i = 0; i < Stack; i++)
+            int lastStack = Stack;
+            for (int i = 0; i < lastStack; i++)
             {
                 Remove();
             }

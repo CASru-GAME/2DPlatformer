@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Scene.Controller;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,8 +18,7 @@ namespace Scene.View
         private readonly List<Image> lifeImageList = new();
         private Vector2 initialLifeImagePosition;
         [SerializeField] private Image initialLifeImage;
-        public static Action<int, int> OnDamaged;
-        public static Action<int, int> OnInitialized;
+        public static Action<int, int> Update;
         
         private void Awake()
         {
@@ -28,31 +28,30 @@ namespace Scene.View
             overCanvas.enabled = false;
             initialLifeImagePosition = initialLifeImage.rectTransform.anchoredPosition;
             Destroy(initialLifeImage.gameObject);
-            OnDamaged += SetLifeImage;
-            OnInitialized += SetLifeImage;
+            Update += SetLifeImage;
         }
 
         public void OpenClear()
         {
-            OnDamaged -= SetLifeImage;
-            OnInitialized -= SetLifeImage;
+            SoundSourceObject.Instance.PlayClearSE();
+            Update -= SetLifeImage;
             StartCoroutine(OpenCanvasCoroutine(clearBackCanvas, clearCanvas));
         }
 
         public void OpenOver()
         {
-            OnDamaged -= SetLifeImage;
-            OnInitialized -= SetLifeImage;
+            Update -= SetLifeImage;
             StartCoroutine(OpenCanvasCoroutine(overBackCanvas, overCanvas));
         }
 
-        private static IEnumerator OpenCanvasCoroutine(Canvas back, Canvas front)
+        private IEnumerator OpenCanvasCoroutine(Canvas back, Canvas front)
         {
+            SoundSourceObject.Instance.ActivateLowPassFilter(true);
             back.enabled = true;
             CanvasGroup group = back.GetComponent<CanvasGroup>();
+            Time.timeScale = 0.2f;
             for (float i = 0; i <= 1; i += Time.unscaledDeltaTime * 1f)
             {
-                Time.timeScale = 1 - i;
                 group.alpha = i;
                 yield return new WaitForSecondsRealtime(Time.unscaledDeltaTime);
             }
