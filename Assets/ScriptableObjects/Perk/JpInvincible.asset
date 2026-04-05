@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Perk.Data.PerkViewData
   id: 13
   sprite: {fileID: 8131106068854808286, guid: 9d012239ae9026049816909330a74a12, type: 3}
-  effectDescription: "\u30B8\u30E3\u30F3\u30D7\u6642\u300150%\u306E\u78BA\u7387\u30672\u79D2\u9593\u7121\u6575\u306B\u306A\u308B"
+  effectDescription: "\u30B8\u30E3\u30F3\u30D7\u6642\u300110%\u306E\u78BA\u7387\u30674\u79D2\u9593\u7121\u6575\u306B\u306A\u308B"
