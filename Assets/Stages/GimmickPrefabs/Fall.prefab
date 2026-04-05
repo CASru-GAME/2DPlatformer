@@ -178,5 +178,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acad91075a806984ab1300be69a8b8c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FallObject
-  fallDelay: 1
+  fallDelay: 0.5
   resetDelay: 3
