@@ -10,6 +10,8 @@ public class Teleportation : MonoBehaviour
         {
             Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
             rb.position = targetPosition;
+            Destroy(gameObject);
         }
     }
+
 }
