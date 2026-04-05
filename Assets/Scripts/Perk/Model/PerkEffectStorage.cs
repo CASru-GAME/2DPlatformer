@@ -86,7 +86,7 @@ namespace Perk.Model
                 if(enabledPerkList[i].id == removedID)
                 {
                     enabledPerkList[i].perkEffect.Remove();
-                    if(enabledPerkList[i].perkEffect.Stack == 0)
+                    if(enabledPerkList[i].perkEffect.Stack <= 0)
                         enabledPerkList.RemoveAt(i);
                     return;
                 }
@@ -101,6 +101,8 @@ namespace Perk.Model
 
         public static void ResetAllPerks()
         {
+            for(int i = 0; i < enabledPerkList.Count; i++)
+                enabledPerkList[i].perkEffect.Reset();
             enabledPerkList.Clear();
             usePerkList.Clear();
             usedPerkTextList.Clear();
@@ -123,6 +125,16 @@ namespace Perk.Model
         public static void ResetUsedPerkTextList()
         {
             usedPerkTextList.Clear();
+        }
+
+        public static void RemovePerk(int id)
+        {
+            for(int i = 0; i < enabledPerkList.Count; i++)
+                if(enabledPerkList[i].id == id)
+                {
+                    enabledPerkList.RemoveAt(i);
+                    return;
+                }
         }
     }
 }

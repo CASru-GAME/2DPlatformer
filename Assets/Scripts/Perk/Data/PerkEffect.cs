@@ -13,5 +13,13 @@ namespace Perk.Data
         {
             return UnityEngine.Random.Range(0, 100) < luck * PerkEffectReference.Instance.LuckMultiplier;
         }
+
+        public void Reset()
+        {
+            for (int i = 0; i < Stack; i++)
+            {
+                Remove();
+            }
+        }
     }
 }
