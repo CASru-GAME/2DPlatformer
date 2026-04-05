@@ -59,6 +59,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField, ReadOnly] private bool debugIsWalled; // 壁に接触しているかどうかのフラグ（インスペクターで確認できるようにする）
     [SerializeField, ReadOnly] private bool debugIsNearWall; // 壁に近づいているかどうかのフラグ（インスペクターで確認できるようにする）
     [SerializeField, ReadOnly] private bool debugIsClimbing; // 壁つかまり状態かどうかのフラグ（インスペクターで確認できるようにする）
+    [SerializeField, ReadOnly] private bool debugIsGliding; // 滞空状態かどうかのフラグ（インスペクターで確認できるようにする）
+    [SerializeField, ReadOnly] private bool debugIsLadderClimbing; // はしご登り状態かどうかのフラグ（インスペクターで確認できるようにする）
     [SerializeField, ReadOnly] private int debugRemainJumpCount; // 残りのジャンプ回数（インスペクターで確認できるようにする）
     [SerializeField, ReadOnly] private PlayerState debugCurrentState; // 現在の状態（インスペクターで確認できるようにする）
     [SerializeField, ReadOnly] private int debugCurrentLives; // 現在の残機（インスペクターで確認できるようにする）
@@ -137,6 +139,17 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        //回復のパークの効果
+        if (perk.CanHeal)
+        {
+            for (int i =0; i < perk.HealStack; i++)
+            {
+                status.AddLife();
+            }
+
+            perk.HealStack = 0; //回復したらスタックをリセット
+        }
+        
         // 毎フレームの通知
         PerkEvents.CheckLife?.Invoke(status.CurrentLives);
         PerkEvents.CheckPosition?.Invoke(transform.position);
@@ -264,7 +277,9 @@ public class PlayerController : MonoBehaviour
         debugRemainJumpCount = remainJumpCount;
         debugCurrentState = psm.CurrentState;
         debugCurrentLives = status.CurrentLives;
-        
+        debugIsGliding = isGliding;
+        debugIsLadderClimbing = canLadderClimb;
+
         //アニメーションの更新
         UpdateAnimation();
     }
@@ -553,6 +568,8 @@ public class PlayerController : MonoBehaviour
 
         //壁と反対の方向にする
         float kickDirection = -wallDirection;
+
+        rb.linearVelocity = new Vector2(0, 0); // 壁キック前に速度をリセットして、壁キックの力が一定になるようにする
 
         //速度を上書きして壁キックをする
         rb.linearVelocity = new Vector2(kickDirection * wallKickForce.x, wallKickForce.y);

@@ -87,8 +87,11 @@ public class PlayerStatus
     // 残機を増やすメソッド
     public void AddLife()
     {
-        CurrentLives++;
-        OnLivesChanged?.Invoke(CurrentLives);
+        if (CurrentLives < MaxLives) 
+        {
+            CurrentLives++;
+            OnLivesChanged?.Invoke(CurrentLives);
+        }
     }
 
     // リセット（コンティニュー時など）
