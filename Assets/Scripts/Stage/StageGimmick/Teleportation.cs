@@ -1,3 +1,4 @@
+using Scene.Controller;
 using UnityEngine;
 
 public class Teleportation : MonoBehaviour
@@ -10,6 +11,7 @@ public class Teleportation : MonoBehaviour
         {
             Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
             rb.position = targetPosition;
+            SoundSourceObject.Instance.PlayWarpSE();
             Destroy(gameObject);
         }
     }

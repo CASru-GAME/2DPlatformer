@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4299992444599892757}
   - component: {fileID: -2134501496642482403}
   - component: {fileID: 2211480143516487759}
+  - component: {fileID: -1474168776117309508}
   m_Layer: 0
   m_Name: SoundSourceObject
   m_TagString: Untagged
@@ -60,6 +61,12 @@ MonoBehaviour:
   damagedSE: {fileID: 8300000, guid: ba84a2939743f734a815b1e7c849946d, type: 3}
   jumpSE: {fileID: 8300000, guid: 71319e904e3fe804fb93e6c9f4582fa0, type: 3}
   landSE: {fileID: 8300000, guid: 5b2a4e45184c89b43b4d558adf810994, type: 3}
+  clearSE: {fileID: 8300000, guid: 261417e6970ed744fba6f6ad08ba1b46, type: 3}
+  healSE: {fileID: 8300000, guid: 7a9de3226760ddf409bce805729d6990, type: 3}
+  shieldSE: {fileID: 8300000, guid: 22f8140bae7949e409c32dddef47f1fc, type: 3}
+  warpSE: {fileID: 8300000, guid: a17bac3fcbf58b64dacd3c57a2ed0036, type: 3}
+  invincibleSE: {fileID: 8300000, guid: d74c168b3c4ede9489c20628fbd7dbc8, type: 3}
+  lowPassFilter: {fileID: -1474168776117309508}
 --- !u!82 &4299992444599892757
 AudioSource:
   m_ObjectHideFlags: 0
@@ -342,6 +349,31 @@ AudioSource:
     - serializedVersion: 3
       time: 0
       value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!169 &-1474168776117309508
+AudioLowPassFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4401493146659388806}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_LowpassResonanceQ: 1
+  lowpassLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.22727273
       inSlope: 0
       outSlope: 0
       tangentMode: 0

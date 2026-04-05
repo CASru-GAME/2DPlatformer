@@ -1,7 +1,4 @@
-using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.UI;
 
 namespace Player.View
 {

@@ -80,6 +80,7 @@ namespace Scene.Controller
             SceneManager.UnloadSceneAsync(sceneNameData.GameSceneName);
             SceneManager.LoadScene(sceneNameData.TitleSceneName, LoadSceneMode.Additive);
             Time.timeScale = 1f;
+            SoundSourceObject.Instance.ActivateLowPassFilter(false);
         }
 
         public void PlayOpenInvoke()

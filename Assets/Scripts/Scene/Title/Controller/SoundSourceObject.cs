@@ -21,6 +21,12 @@ namespace Scene.Controller
         [SerializeField] private AudioClip damagedSE;
         [SerializeField] private AudioClip jumpSE;
         [SerializeField] private AudioClip landSE;
+        [SerializeField] private AudioClip clearSE;
+        [SerializeField] private AudioClip healSE;
+        [SerializeField] private AudioClip shieldSE;
+        [SerializeField] private AudioClip warpSE;
+        [SerializeField] private AudioClip invincibleSE;
+        [SerializeField] private AudioLowPassFilter lowPassFilter;
 
         private void Awake()
         {
@@ -44,12 +50,12 @@ namespace Scene.Controller
                 while(bgmSourceA.isPlaying)
                     yield return null;
                 bgmSourceA.clip = bgmSourceB.clip;
-                nextStartTime += bgmSourceB.clip.length - 0.1f;
+                nextStartTime += bgmSourceB.clip.length - 0.1f * Time.timeScale;
                 bgmSourceA.PlayScheduled(nextStartTime);
 
                 while(bgmSourceB.isPlaying)
                     yield return null;
-                nextStartTime += bgmSourceA.clip.length - 0.1f;
+                nextStartTime += bgmSourceA.clip.length - 0.1f * Time.timeScale;
                 bgmSourceB.PlayScheduled(nextStartTime);
             }
         }
@@ -99,6 +105,38 @@ namespace Scene.Controller
         public void PlayLandSE()
         {
             seSource.PlayOneShot(landSE);
+        }
+
+        public void PlayClearSE()
+        {
+            bgmSourceA.Stop();
+            bgmSourceB.Stop();
+            seSource.PlayOneShot(clearSE);
+        }
+
+        public void PlayHealSE()
+        {
+            seSource.PlayOneShot(healSE);
+        }
+
+        public void PlayShieldSE()
+        {
+            seSource.PlayOneShot(shieldSE);
+        }
+
+        public void PlayWarpSE()
+        {
+            seSource.PlayOneShot(warpSE);
+        }
+
+        public void PlayInvincibleSE()
+        {
+            seSource.PlayOneShot(invincibleSE);
+        }
+
+        public void ActivateLowPassFilter(bool isActive)
+        {
+            lowPassFilter.enabled = isActive;
         }
     }
 }
