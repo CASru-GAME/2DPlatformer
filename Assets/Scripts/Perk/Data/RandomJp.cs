@@ -28,8 +28,8 @@ namespace Perk.Data
 
         private void OnJump()
         {
-            float rand = Random.Range(0.5f, 1.5f);
-            PerkEffectReference.Instance.JumpPowerMultiplierRandom = rand;
+            float rand = Random.Range(0, 8);
+            PerkEffectReference.Instance.JumpPowerMultiplierRandom = 0.8f + 0.1f * rand;
         }
     }
 }
